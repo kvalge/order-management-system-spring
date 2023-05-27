@@ -71,4 +71,9 @@ public class CustomerService {
         customerRepository.save(customer);
         return customerMapper.toDto(customer);
     }
+
+    public void delete(Long id) {
+        log.info("Delete Customer by id : {}", id);
+        customerRepository.deleteById(id);
+    }
 }

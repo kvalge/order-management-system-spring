@@ -67,4 +67,11 @@ public class CustomerController {
                 .ok()
                 .body(customerService.partialUpdate(customerDto));
     }
+
+    @DeleteMapping("/customer/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+        log.info("REST request to delete Customer : {}", id);
+        customerService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
