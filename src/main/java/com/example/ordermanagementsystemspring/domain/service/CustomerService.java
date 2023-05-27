@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,7 +26,7 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     public CustomerDto save(CustomerDto customerDto) {
-        log.debug("Request to createCustomer Customer : {}", customerDto);
+        log.info("Request to createCustomer Customer : {}", customerDto);
 
         Customer customer = customerMapper.toEntity(customerDto);
         customer = customerRepository.save(customer);
@@ -42,7 +41,7 @@ public class CustomerService {
     }
 
     public CustomerDto findById(Long id) {
-        log.debug("Request Customer by id : {}", id);
+        log.info("Request Customer by id : {}", id);
 
         Optional<Customer> customer =
                 Optional.ofNullable(customerRepository
