@@ -42,14 +42,29 @@ public class CustomerController {
                 .body(customerService.findById(id));
     }
 
-    @PutMapping(value = "/customer", produces = {"application/json"}, consumes = { "application/json"})
+    @PutMapping(value = "/customer", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto customerDto) {
-        log.debug("REST request to updateCustomer Customer ");
+        log.info("REST request to updateCustomer Customer ");
         if (customerDto == null) {
             throw new CustomerException("Customer data are missing");
         }
         return ResponseEntity
                 .ok()
                 .body(customerService.update(customerDto));
+    }
+
+    @PatchMapping(value = "/customer/{id}", produces = {"application/json"}, consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<CustomerDto> partialUpdateCustomer(
+            @PathVariable(value = "id", required = false) final Long id,
+            @RequestBody CustomerDto customerDto) {
+        log.info("REST request to updateCustomer Customer");
+
+        if (customerDto == null) {
+            throw new CustomerException("Customer data are missing");
+        }
+        customerDto.setId(id);
+        return ResponseEntity
+                .ok()
+                .body(customerService.partialUpdate(customerDto));
     }
 }
