@@ -26,6 +26,7 @@ public class CustomerMapper {
         }
 
         CustomerDto dto = new CustomerDto();
+        dto.setId(entity.getId());
         dto.setRegistrationCode(entity.getRegistrationCode());
         dto.setFull_name(entity.getFull_name());
         dto.setEmail(entity.getEmail());
