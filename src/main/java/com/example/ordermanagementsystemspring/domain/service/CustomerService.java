@@ -44,7 +44,11 @@ public class CustomerService {
     public CustomerDto findById(Long id) {
         log.debug("Request Customer by id : {}", id);
 
-        Optional<Customer> customer = Optional.ofNullable(customerRepository.findById(id).orElseThrow(() -> new CustomerException("Customer #" + id + " not found", ExceptionCodes.CUSTOMER_NOT_FOUND)));;
+        Optional<Customer> customer =
+                Optional.ofNullable(customerRepository
+                        .findById(id)
+                        .orElseThrow(() -> new CustomerException(
+                                "Customer #" + id + " not found", ExceptionCodes.CUSTOMER_NOT_FOUND)));;
 
         return customerMapper.toDto(customer.get());
     }
