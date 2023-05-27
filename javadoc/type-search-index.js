@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.example.ordermanagementsystemspring","l":"OrderManagementSystemSpringApplication"},{"p":"com.example.ordermanagementsystemspring","l":"OrderManagementSystemSpringApplicationTests"}];updateSearchResults();
