@@ -1,5 +1,7 @@
 package com.example.ordermanagementsystemspring.domain.service;
 
+import com.example.ordermanagementsystemspring.domain.exception.CustomerException;
+import com.example.ordermanagementsystemspring.domain.exception.ExceptionCodes;
 import com.example.ordermanagementsystemspring.domain.model.Customer;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.CustomerDto;
@@ -42,7 +44,7 @@ public class CustomerService {
     public CustomerDto findById(Long id) {
         log.debug("Request Customer by id : {}", id);
 
-        Optional<Customer> customer = customerRepository.findById(id);
+        Optional<Customer> customer = Optional.ofNullable(customerRepository.findById(id).orElseThrow(() -> new CustomerException("Customer #" + id + " not found", ExceptionCodes.CUSTOMER_NOT_FOUND)));;
 
         return customerMapper.toDto(customer.get());
     }
