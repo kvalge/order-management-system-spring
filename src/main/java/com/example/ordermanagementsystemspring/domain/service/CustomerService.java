@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,5 +37,13 @@ public class CustomerService {
         List<Customer> customers = customerRepository.findAll();
 
         return customerMapper.toDtoList(customers);
+    }
+
+    public CustomerDto findById(Long id) {
+        log.debug("Request Customer by id : {}", id);
+
+        Optional<Customer> customer = customerRepository.findById(id);
+
+        return customerMapper.toDto(customer.get());
     }
 }

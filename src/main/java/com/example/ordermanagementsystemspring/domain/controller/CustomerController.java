@@ -26,10 +26,18 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/customer", produces = {"application/json"})
-    public ResponseEntity<List<CustomerDto>> getAllUsers() {
+    public ResponseEntity<List<CustomerDto>> getAllCustomers() {
         log.debug("REST request to get all Customers");
         return ResponseEntity
                 .ok()
                 .body(customerService.findAll());
+    }
+
+    @GetMapping(value = "/customer/{id}", produces = {"application/json"})
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable(value = "id", required = true) final Long id) {
+        log.debug("REST request to get Customer : {}", id);
+        return ResponseEntity
+                .ok()
+                .body(customerService.findById(id));
     }
 }
