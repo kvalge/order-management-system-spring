@@ -1,5 +1,9 @@
-package com.example.ordermanagementsystemspring.domain.customer;
+package com.example.ordermanagementsystemspring.domain.service;
 
+import com.example.ordermanagementsystemspring.domain.model.Customer;
+import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
+import com.example.ordermanagementsystemspring.domain.service.dto.CustomerDto;
+import com.example.ordermanagementsystemspring.domain.service.mapper.CustomerMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,9 +33,8 @@ public class CustomerService {
     }
 
     public List<CustomerDto> findAll() {
-        return customerRepository.findAll()
-                .stream()
-                .map(customerMapper::toDto)
-                .collect(Collectors.toList());
+        List<Customer> customers = customerRepository.findAll();
+
+        return customerMapper.toDtoList(customers);
     }
 }

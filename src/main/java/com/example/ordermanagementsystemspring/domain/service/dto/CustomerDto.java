@@ -1,4 +1,4 @@
-package com.example.ordermanagementsystemspring.domain.customer;
+package com.example.ordermanagementsystemspring.domain.service.dto;
 
 import lombok.Data;
 

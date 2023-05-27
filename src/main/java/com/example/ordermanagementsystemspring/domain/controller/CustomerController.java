@@ -1,5 +1,7 @@
-package com.example.ordermanagementsystemspring.domain.customer;
+package com.example.ordermanagementsystemspring.domain.controller;
 
+import com.example.ordermanagementsystemspring.domain.service.dto.CustomerDto;
+import com.example.ordermanagementsystemspring.domain.service.CustomerService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
