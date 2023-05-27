@@ -3,10 +3,9 @@ package com.example.ordermanagementsystemspring.domain.customer;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -21,6 +20,14 @@ public class CustomerController {
         log.debug("REST request to createCustomer Customer");
         return ResponseEntity
                 .ok()
-                .body(customerService.createCustomer(customerDto));
+                .body(customerService.save(customerDto));
+    }
+
+    @GetMapping(value = "/customer", produces = {"application/json"})
+    public ResponseEntity<List<CustomerDto>> getAllUsers() {
+        log.debug("REST request to get all Customers");
+        return ResponseEntity
+                .ok()
+                .body(customerService.findAll());
     }
 }
