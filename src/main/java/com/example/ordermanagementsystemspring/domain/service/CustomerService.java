@@ -51,4 +51,13 @@ public class CustomerService {
 
         return customerMapper.toDto(customer.get());
     }
+
+    public CustomerDto update(CustomerDto customerDto) {
+        log.debug("Request to update Customer : {}", customerDto);
+        Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
+        customerMapper.update(customer, customerDto);
+
+        customerRepository.save(customer);
+        return customerMapper.toDto(customer);
+    }
 }
