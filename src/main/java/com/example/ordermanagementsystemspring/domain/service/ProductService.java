@@ -92,4 +92,10 @@ public class ProductService {
 
         return productMapper.toDto(product);
     }
+
+    public void delete(Long id) {
+        log.info("Request to delete Product by id : {}", id);
+
+        productRepository.deleteById(id);
+    }
 }
