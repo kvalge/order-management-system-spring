@@ -1,5 +1,6 @@
 package com.example.ordermanagementsystemspring.domain.service;
 
+import com.example.ordermanagementsystemspring.domain.exception.OrderLineException;
 import com.example.ordermanagementsystemspring.domain.model.OrderLine;
 import com.example.ordermanagementsystemspring.domain.model.Product;
 import com.example.ordermanagementsystemspring.domain.repository.OrderLineRepository;
@@ -39,5 +40,17 @@ public class OrderLineService {
         dto.setProductId(orderLineDto.getProductId());
 
         return dto;
+    }
+
+    public OrderLineDto update(OrderLineDto orderLineDto) {
+        log.info("Request to update Order Line : {}", orderLineDto);
+
+        OrderLine orderLine = orderLineRepository
+                .findById(orderLineDto.getId())
+                .orElseThrow(() -> new OrderLineException("Order Line #" + orderLineDto.getId() + " not found"));
+        orderLineMapper.update(orderLine, orderLineDto);
+        orderLineRepository.save(orderLine);
+
+        return orderLineMapper.toDto(orderLine);
     }
 }
