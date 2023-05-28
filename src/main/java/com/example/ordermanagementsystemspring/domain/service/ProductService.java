@@ -27,7 +27,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     /**
-     * Product inserted price is given in cents, returned price is calculated to euros.
+     * Inserted price of the product is given in cents, returned price is calculated to euros.
      */
     public ProductDto save(ProductDto productDto) {
         log.info("Request to save Product : {}", productDto);
@@ -57,5 +57,20 @@ public class ProductService {
                                 "Product #" + id + " not found", ExceptionCodes.PRODUCT_NOT_FOUND)));
 
         return productMapper.toDto(product.get());
+    }
+
+    /**
+     * Updated price of the product is given in cents, saved price is calculated to euros.
+     */
+    public ProductDto update(ProductDto productDto) {
+        log.info("Request to update Product : {}", productDto);
+
+        Product product = productRepository.findById(productDto.getId()).orElseThrow(() -> new ProductException("Product #" + productDto.getId() + " not found"));
+        productMapper.update(product, productDto);
+        float price = (float) Math.round((product.getUnitPrice() / 100) * 100) / 100;
+        product.setUnitPrice(price);
+        productRepository.save(product);
+
+        return productMapper.toDto(product);
     }
 }

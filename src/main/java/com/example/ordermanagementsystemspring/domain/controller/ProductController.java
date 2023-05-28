@@ -1,5 +1,6 @@
 package com.example.ordermanagementsystemspring.domain.controller;
 
+import com.example.ordermanagementsystemspring.domain.exception.ProductException;
 import com.example.ordermanagementsystemspring.domain.service.ProductService;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductDto;
 import jakarta.annotation.Resource;
@@ -39,5 +40,16 @@ public class ProductController {
         return ResponseEntity
                 .ok()
                 .body(productService.findById(id));
+    }
+
+    @PutMapping(value = "/product", produces = {"application/json"}, consumes = {"application/json"})
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto) {
+        log.info("REST request to update Product");
+        if (productDto == null) {
+            throw new ProductException("Product data are missing");
+        }
+        return ResponseEntity
+                .ok()
+                .body(productService.update(productDto));
     }
 }
