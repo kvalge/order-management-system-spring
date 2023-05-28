@@ -21,6 +21,7 @@ public class ProductController {
     @PostMapping(value = "/product", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
         log.info("REST request to create Product");
+
         return ResponseEntity
                 .ok()
                 .body(productService.save(productDto));
@@ -29,6 +30,7 @@ public class ProductController {
     @GetMapping(value = "/product", produces = {"application/json"})
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         log.info("REST request to get all Products");
+
         return ResponseEntity
                 .ok()
                 .body(productService.findAll());
@@ -37,6 +39,7 @@ public class ProductController {
     @GetMapping(value = "/product/{id}", produces = {"application/json"})
     public ResponseEntity<ProductDto> getProductById(@PathVariable(value = "id", required = true) final Long id) {
         log.info("REST request to get Product : {}", id);
+
         return ResponseEntity
                 .ok()
                 .body(productService.findById(id));
@@ -48,8 +51,25 @@ public class ProductController {
         if (productDto == null) {
             throw new ProductException("Product data are missing");
         }
+
         return ResponseEntity
                 .ok()
                 .body(productService.update(productDto));
+    }
+
+    @PatchMapping(value = "/product/{id}", produces = {"application/json"}, consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<ProductDto> partialUpdateProduct(
+            @PathVariable(value = "id", required = false) final Long id,
+            @RequestBody ProductDto productDto) {
+        log.info("REST request to partial update Product");
+
+        if (productDto == null) {
+            throw new ProductException("Product data are missing");
+        }
+        productDto.setId(id);
+
+        return ResponseEntity
+                .ok()
+                .body(productService.partialUpdate(productDto));
     }
 }

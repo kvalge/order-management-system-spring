@@ -65,8 +65,27 @@ public class ProductService {
     public ProductDto update(ProductDto productDto) {
         log.info("Request to update Product : {}", productDto);
 
-        Product product = productRepository.findById(productDto.getId()).orElseThrow(() -> new ProductException("Product #" + productDto.getId() + " not found"));
+        Product product = productRepository
+                .findById(productDto.getId())
+                .orElseThrow(() -> new ProductException("Product #" + productDto.getId() + " not found"));
         productMapper.update(product, productDto);
+        float price = (float) Math.round((product.getUnitPrice() / 100) * 100) / 100;
+        product.setUnitPrice(price);
+        productRepository.save(product);
+
+        return productMapper.toDto(product);
+    }
+
+    /**
+     * Updated price of the product is given in cents, saved price is calculated to euros.
+     */
+    public ProductDto partialUpdate(ProductDto productDto) {
+        log.info("Request to partially update Product : {}", productDto);
+
+        Product product = productRepository
+                .findById(productDto.getId())
+                .orElseThrow(() -> new ProductException("Product #" + productDto.getId() + " not found"));
+        productMapper.partialUpdate(product, productDto);
         float price = (float) Math.round((product.getUnitPrice() / 100) * 100) / 100;
         product.setUnitPrice(price);
         productRepository.save(product);
