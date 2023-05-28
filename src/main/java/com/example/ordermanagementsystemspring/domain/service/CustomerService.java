@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -29,6 +30,7 @@ public class CustomerService {
         log.info("Request to createCustomer Customer : {}", customerDto);
 
         Customer customer = customerMapper.toEntity(customerDto);
+        customer.setRegistrationCode(UUID.randomUUID().toString());
         customer = customerRepository.save(customer);
 
         return customerMapper.toDto(customer);
