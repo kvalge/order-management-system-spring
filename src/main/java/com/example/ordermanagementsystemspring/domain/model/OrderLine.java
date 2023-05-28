@@ -15,6 +15,6 @@ public class OrderLine {
     @Column(nullable = false)
     private Integer quantity;
 
-    @OneToOne
+    @ManyToOne
     private Product product;
 }
