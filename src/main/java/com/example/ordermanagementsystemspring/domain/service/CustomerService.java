@@ -27,7 +27,7 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     public CustomerDto save(CustomerDto customerDto) {
-        log.info("Request to createCustomer Customer : {}", customerDto);
+        log.info("Request to save Customer : {}", customerDto);
 
         Customer customer = customerMapper.toEntity(customerDto);
         customer.setRegistrationCode(UUID.randomUUID().toString());
@@ -43,7 +43,7 @@ public class CustomerService {
     }
 
     public CustomerDto findById(Long id) {
-        log.info("Request Customer by id : {}", id);
+        log.info("Request to find Customer by id : {}", id);
 
         Optional<Customer> customer =
                 Optional.ofNullable(customerRepository
@@ -75,7 +75,7 @@ public class CustomerService {
     }
 
     public void delete(Long id) {
-        log.info("Delete Customer by id : {}", id);
+        log.info("Request to delete Customer by id : {}", id);
         customerRepository.deleteById(id);
     }
 }

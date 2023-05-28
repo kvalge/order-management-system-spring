@@ -20,7 +20,7 @@ public class CustomerController {
 
     @PostMapping(value = "/customer", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerDto customerDto) {
-        log.info("REST request to createCustomer Customer");
+        log.info("REST request to create Customer");
         return ResponseEntity
                 .ok()
                 .body(customerService.save(customerDto));
@@ -44,7 +44,7 @@ public class CustomerController {
 
     @PutMapping(value = "/customer", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto customerDto) {
-        log.info("REST request to updateCustomer Customer ");
+        log.info("REST request to update Customer");
         if (customerDto == null) {
             throw new CustomerException("Customer data are missing");
         }
@@ -57,7 +57,7 @@ public class CustomerController {
     public ResponseEntity<CustomerDto> partialUpdateCustomer(
             @PathVariable(value = "id", required = false) final Long id,
             @RequestBody CustomerDto customerDto) {
-        log.info("REST request to updateCustomer Customer");
+        log.info("REST request to partial update Customer");
 
         if (customerDto == null) {
             throw new CustomerException("Customer data are missing");
