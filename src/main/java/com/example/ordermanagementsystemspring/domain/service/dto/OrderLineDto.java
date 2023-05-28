@@ -4,4 +4,8 @@ import lombok.Data;
 
 @Data
 public class OrderLineDto {
+
+    private Long id;
+    private Integer quantity;
+    private Integer productId;
 }
