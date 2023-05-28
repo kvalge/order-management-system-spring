@@ -8,7 +8,7 @@ Database PostgreSQL.
 Used IDE: IntelliJ IDEA 2023.2 EAP.  
 
 ### Currently implemented functionalities
-Add, get, edit, delete customers, products.  
+Add, get, edit, delete Customers, Products, OrderLines.  
 
 Slf4j is used to generate logging statements.  
 
