@@ -1,7 +1,6 @@
 package com.example.ordermanagementsystemspring.domain.controller;
 
 import com.example.ordermanagementsystemspring.domain.service.ProductService;
-import com.example.ordermanagementsystemspring.domain.service.dto.CustomerDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductDto;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -32,5 +31,13 @@ public class ProductController {
         return ResponseEntity
                 .ok()
                 .body(productService.findAll());
+    }
+
+    @GetMapping(value = "/product/{id}", produces = {"application/json"})
+    public ResponseEntity<ProductDto> getProductById(@PathVariable(value = "id", required = true) final Long id) {
+        log.info("REST request to get Product : {}", id);
+        return ResponseEntity
+                .ok()
+                .body(productService.findById(id));
     }
 }

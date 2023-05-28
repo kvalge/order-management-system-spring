@@ -1,5 +1,7 @@
 package com.example.ordermanagementsystemspring.domain.service;
 
+import com.example.ordermanagementsystemspring.domain.exception.ExceptionCodes;
+import com.example.ordermanagementsystemspring.domain.exception.ProductException;
 import com.example.ordermanagementsystemspring.domain.model.Product;
 import com.example.ordermanagementsystemspring.domain.repository.ProductRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductDto;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,7 +36,7 @@ public class ProductService {
         product.setSkuCode(UUID.randomUUID().toString());
         product = productRepository.save(product);
         float price = (float) Math.round((productDto.getUnitPrice() / 100) * 100) / 100;
-        product.setUnitPrice (price);
+        product.setUnitPrice(price);
 
         return productMapper.toDto(product);
     }
@@ -42,5 +45,17 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
 
         return productMapper.toDtoList(products);
+    }
+
+    public ProductDto findById(Long id) {
+        log.info("Request to find Product by id : {}", id);
+
+        Optional<Product> product =
+                Optional.ofNullable(productRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ProductException(
+                                "Product #" + id + " not found", ExceptionCodes.PRODUCT_NOT_FOUND)));
+
+        return productMapper.toDto(product.get());
     }
 }
