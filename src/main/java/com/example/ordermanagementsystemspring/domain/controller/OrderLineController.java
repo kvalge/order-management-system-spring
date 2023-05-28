@@ -28,6 +28,7 @@ public class OrderLineController {
     @PutMapping(value = "/orderline", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<OrderLineDto> updateOrderLine(@RequestBody OrderLineDto orderLineDto) {
         log.info("REST request to update Order Line");
+
         if (orderLineDto == null) {
             throw new OrderLineException("Order Line data are missing");
         }
@@ -35,5 +36,14 @@ public class OrderLineController {
         return ResponseEntity
                 .ok()
                 .body(orderLineService.update(orderLineDto));
+    }
+
+    @DeleteMapping("/orderline/{id}")
+    public ResponseEntity<Void> deleteOrderLine(@PathVariable Long id) {
+        log.info("REST request to delete Order Line : {}", id);
+
+        orderLineService.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

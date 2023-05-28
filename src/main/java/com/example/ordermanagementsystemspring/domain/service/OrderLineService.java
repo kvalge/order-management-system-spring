@@ -53,4 +53,10 @@ public class OrderLineService {
 
         return orderLineMapper.toDto(orderLine);
     }
+
+    public void delete(Long id) {
+        log.info("Request to delete Order Line by id : {}", id);
+
+        orderLineRepository.deleteById(id);
+    }
 }
