@@ -19,7 +19,7 @@ public class Product {
     private String skuCode;
 
     @Column(length = 250, nullable = false)
-    private Integer unitPrice;
+    private Float unitPrice;
 }
 
 
