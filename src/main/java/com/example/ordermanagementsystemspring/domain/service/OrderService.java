@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,8 @@ public class OrderService {
         Order order = orderMapper.toEntity(orderDto);
         Optional<Customer> customer = customerRepository.findById(orderDto.getCustomerId());
         order.setCustomer(customer.get());
+        Date date = new Date();
+        order.setSubmissionDate(date);
         orderRepository.save(order);
 
         OrderDto dto = orderMapper.toDto(order);
