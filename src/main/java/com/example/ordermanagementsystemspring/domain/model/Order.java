@@ -3,8 +3,8 @@ package com.example.ordermanagementsystemspring.domain.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,7 +17,7 @@ public class Order {
     private Long id;
 
     @Column
-    private Date submissionDate;
+    private LocalDate submissionDate;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
