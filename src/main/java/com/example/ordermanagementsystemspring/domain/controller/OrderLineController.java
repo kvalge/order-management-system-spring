@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @Slf4j
@@ -23,6 +25,15 @@ public class OrderLineController {
         return ResponseEntity
                 .ok()
                 .body(orderLineService.save(orderLineDto));
+    }
+
+    @GetMapping(value = "/orderline/product", produces = {"application/json"})
+    public ResponseEntity<List<OrderLineDto>> getOrdersByProduct(@RequestParam Long productId) {
+        log.info("REST request to get Order Lines by Product id");
+
+        return ResponseEntity
+                .ok()
+                .body(orderLineService.findByProduct(productId));
     }
 
     @PutMapping(value = "/orderline", produces = {"application/json"}, consumes = {"application/json"})
