@@ -5,6 +5,7 @@ import com.example.ordermanagementsystemspring.domain.model.Order;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
 import com.example.ordermanagementsystemspring.domain.repository.OrderRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
 import com.example.ordermanagementsystemspring.domain.service.mapper.OrderMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,6 +31,9 @@ public class OrderService {
 
     @Resource
     private CustomerRepository customerRepository;
+
+    @Resource
+    private OrderLineService orderLineService;
 
     public OrderDto save(OrderDto orderDto) {
         log.info("Request to save Order : {}", orderDto);
@@ -64,6 +69,19 @@ public class OrderService {
     public List<OrderDto> findByProduct(Long productId) {
         log.info("Request to find Order by Product id : {}", productId);
 
-        return null;
+        List<OrderLineDto> orderLineDtos = orderLineService.findByProduct(productId);
+
+        List<OrderDto> orderDtos = new ArrayList<>();
+
+        for (OrderLineDto orderLineDto : orderLineDtos) {
+            Long orderId = orderLineDto.getOrderId();
+            Optional<Order> order = orderRepository.findById(orderId);
+            OrderDto orderDto = orderMapper.toDto(order.get());
+            orderDto.setCustomerId(order.get().getCustomer().getId());
+            orderDto.setSubmissionDate(order.get().getSubmissionDate());
+            orderDtos.add(orderDto);
+        }
+
+        return orderDtos;
     }
 }

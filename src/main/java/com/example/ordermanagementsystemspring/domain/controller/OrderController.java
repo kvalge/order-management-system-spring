@@ -35,4 +35,13 @@ public class OrderController {
                 .ok()
                 .body(orderService.findByDate(date));
     }
+
+    @GetMapping(value = "/order/product", produces = {"application/json"})
+    public ResponseEntity<List<OrderDto>> getOrdersByProduct(@RequestParam Long productId) {
+        log.info("REST request to get Orders by product");
+
+        return ResponseEntity
+                .ok()
+                .body(orderService.findByProduct(productId));
+    }
 }
