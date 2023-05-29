@@ -59,7 +59,11 @@ public class OrderLineService {
         orderLineMapper.update(orderLine, orderLineDto);
         orderLineRepository.save(orderLine);
 
-        return orderLineMapper.toDto(orderLine);
+        OrderLineDto dto = orderLineMapper.toDto(orderLine);
+        dto.setProductId(orderLine.getProduct().getId());
+        dto.setOrderId(orderLine.getOrder().getId());
+
+        return dto;
     }
 
     public void delete(Long id) {
