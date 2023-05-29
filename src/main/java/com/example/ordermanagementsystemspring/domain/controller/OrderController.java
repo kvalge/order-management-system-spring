@@ -38,10 +38,19 @@ public class OrderController {
 
     @GetMapping(value = "/order/product", produces = {"application/json"})
     public ResponseEntity<List<OrderDto>> getOrdersByProduct(@RequestParam Long productId) {
-        log.info("REST request to get Orders by product");
+        log.info("REST request to get Orders by Product");
 
         return ResponseEntity
                 .ok()
                 .body(orderService.findByProduct(productId));
+    }
+
+    @GetMapping(value = "/order/customer", produces = {"application/json"})
+    public ResponseEntity<List<OrderDto>> getOrdersByCustomer(@RequestParam Long customerId) {
+        log.info("REST request to get Orders by Customer");
+
+        return ResponseEntity
+                .ok()
+                .body(orderService.findByCustomer(customerId));
     }
 }

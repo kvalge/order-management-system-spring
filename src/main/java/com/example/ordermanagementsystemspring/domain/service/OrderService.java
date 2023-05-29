@@ -84,4 +84,20 @@ public class OrderService {
 
         return orderDtos;
     }
+
+    public List<OrderDto> findByCustomer(Long customerId) {
+        log.info("Request to find Order by Customer id : {}", customerId);
+
+        List<Order> orders = orderRepository.findAllByCustomerId(customerId);
+
+        List<OrderDto> orderDtos = new ArrayList<>();
+
+        for (Order order : orders) {
+            OrderDto dto = orderMapper.toDto(order);
+            dto.setCustomerId(order.getCustomer().getId());
+            orderDtos.add(dto);
+        }
+
+        return orderDtos;
+    }
 }
