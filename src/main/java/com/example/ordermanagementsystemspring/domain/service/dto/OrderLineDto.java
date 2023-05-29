@@ -8,4 +8,5 @@ public class OrderLineDto {
     private Long id;
     private Integer quantity;
     private Long productId;
+    private Long orderId;
 }
