@@ -2,7 +2,9 @@ package com.example.ordermanagementsystemspring.domain.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "\"order\"")
@@ -16,8 +18,9 @@ public class Order {
     private Date submissionDate;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne
-    private OrderLine orderLine;
+    @OneToMany(mappedBy = "order")
+    private List<OrderLine> orderLines = new ArrayList<>();
 }

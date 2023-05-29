@@ -3,6 +3,9 @@ package com.example.ordermanagementsystemspring.domain.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "customer")
 @Data
@@ -21,6 +24,9 @@ public class Customer {
     @Column(length = 50, unique = true, nullable = false)
     private String email;
 
-    @Column(length = 50, unique = true, nullable = false)
+    @Column(length = 50, nullable = false)
     private String telephone;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders = new ArrayList<>();
 }
