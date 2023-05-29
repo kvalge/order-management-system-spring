@@ -2,7 +2,9 @@ package com.example.ordermanagementsystemspring.domain.service;
 
 import com.example.ordermanagementsystemspring.domain.model.Customer;
 import com.example.ordermanagementsystemspring.domain.model.Order;
+import com.example.ordermanagementsystemspring.domain.model.OrderLine;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
+import com.example.ordermanagementsystemspring.domain.repository.OrderLineRepository;
 import com.example.ordermanagementsystemspring.domain.repository.OrderRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
@@ -34,6 +36,9 @@ public class OrderService {
 
     @Resource
     private OrderLineService orderLineService;
+
+    @Resource
+    private OrderLineRepository orderLineRepository;
 
     public OrderDto save(OrderDto orderDto) {
         log.info("Request to save Order : {}", orderDto);
@@ -98,5 +103,22 @@ public class OrderService {
         }
 
         return orderDtos;
+    }
+
+    /**
+     * Deletes all Order Lines of the Order before deleting the Order.
+     */
+    public void delete(Long id) {
+        log.info("Request to delete Order by id : {}", id);
+
+        List<OrderLine> orderLines = orderLineRepository.findAll();
+
+        for (OrderLine orderLine : orderLines) {
+            if (orderLine.getOrder().getId() == id) {
+                orderLineService.delete(orderLine.getId());
+            }
+        }
+
+        orderRepository.deleteById(id);
     }
 }

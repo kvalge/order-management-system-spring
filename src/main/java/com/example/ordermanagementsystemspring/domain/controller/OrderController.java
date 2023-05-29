@@ -53,4 +53,13 @@ public class OrderController {
                 .ok()
                 .body(orderService.findByCustomer(customerId));
     }
+
+    @DeleteMapping("/order/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        log.info("REST request to delete Order : {}", id);
+
+        orderService.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
