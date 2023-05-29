@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -78,7 +79,7 @@ public class OrderLineService {
         List<OrderLineDto> orderLineDtos = orderLineMapper.toDtoList(orderLines);
         for (OrderLine orderLine : orderLines) {
             for (OrderLineDto orderLineDto : orderLineDtos) {
-                if (orderLine.getId() == orderLineDto.getId()) {
+                if (Objects.equals(orderLine.getId(), orderLineDto.getId())) {
                     orderLineDto.setProductId(orderLine.getProduct().getId());
                     orderLineDto.setOrderId(orderLine.getOrder().getId());
                 }
