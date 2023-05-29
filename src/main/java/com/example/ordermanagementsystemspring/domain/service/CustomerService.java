@@ -50,32 +50,34 @@ public class CustomerService {
                         .findById(id)
                         .orElseThrow(() -> new CustomerException(
                                 "Customer #" + id + " not found", ExceptionCodes.CUSTOMER_NOT_FOUND)));
-        ;
 
         return customerMapper.toDto(customer.get());
     }
 
     public CustomerDto update(CustomerDto customerDto) {
         log.info("Request to update Customer : {}", customerDto);
+
         Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.update(customer, customerDto);
-
         customerRepository.save(customer);
+
         return customerMapper.toDto(customer);
     }
 
 
     public CustomerDto partialUpdate(CustomerDto customerDto) {
         log.info("Request to partially update Customer : {}", customerDto);
+
         Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.partialUpdate(customer, customerDto);
-
         customerRepository.save(customer);
+
         return customerMapper.toDto(customer);
     }
 
     public void delete(Long id) {
         log.info("Request to delete Customer by id : {}", id);
+
         customerRepository.deleteById(id);
     }
 }

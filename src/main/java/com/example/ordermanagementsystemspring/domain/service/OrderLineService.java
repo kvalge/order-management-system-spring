@@ -52,6 +52,23 @@ public class OrderLineService {
         return dto;
     }
 
+    public List<OrderLineDto> findByProduct(Long productId) {
+        log.info("Request to find Order Line by Product id : {}", productId);
+
+        List<OrderLine> orderLines = orderLineRepository.findAllByProductId(productId);
+        List<OrderLineDto> orderLineDtos = orderLineMapper.toDtoList(orderLines);
+        for (OrderLine orderLine : orderLines) {
+            for (OrderLineDto orderLineDto : orderLineDtos) {
+                if (Objects.equals(orderLine.getId(), orderLineDto.getId())) {
+                    orderLineDto.setProductId(orderLine.getProduct().getId());
+                    orderLineDto.setOrderId(orderLine.getOrder().getId());
+                }
+            }
+        }
+
+        return orderLineDtos;
+    }
+
     public OrderLineDto update(OrderLineDto orderLineDto) {
         log.info("Request to update Order Line : {}", orderLineDto);
 
@@ -72,20 +89,5 @@ public class OrderLineService {
         log.info("Request to delete Order Line by id : {}", id);
 
         orderLineRepository.deleteById(id);
-    }
-
-    public List<OrderLineDto> findByProduct(Long productId) {
-        List<OrderLine> orderLines = orderLineRepository.findAllByProductId(productId);
-        List<OrderLineDto> orderLineDtos = orderLineMapper.toDtoList(orderLines);
-        for (OrderLine orderLine : orderLines) {
-            for (OrderLineDto orderLineDto : orderLineDtos) {
-                if (Objects.equals(orderLine.getId(), orderLineDto.getId())) {
-                    orderLineDto.setProductId(orderLine.getProduct().getId());
-                    orderLineDto.setOrderId(orderLine.getOrder().getId());
-                }
-            }
-        }
-
-        return orderLineDtos;
     }
 }

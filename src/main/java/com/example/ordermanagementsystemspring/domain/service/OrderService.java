@@ -42,7 +42,6 @@ public class OrderService {
         Optional<Customer> customer = customerRepository.findById(orderDto.getCustomerId());
         order.setCustomer(customer.get());
         order.setSubmissionDate(LocalDate.now());
-
         orderRepository.save(order);
 
         OrderDto dto = orderMapper.toDto(order);

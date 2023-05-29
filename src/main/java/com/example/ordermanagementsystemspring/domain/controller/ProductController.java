@@ -48,6 +48,7 @@ public class ProductController {
     @PutMapping(value = "/product", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto) {
         log.info("REST request to update Product");
+
         if (productDto == null) {
             throw new ProductException("Product data are missing");
         }

@@ -21,6 +21,7 @@ public class CustomerController {
     @PostMapping(value = "/customer", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerDto customerDto) {
         log.info("REST request to create Customer");
+
         return ResponseEntity
                 .ok()
                 .body(customerService.save(customerDto));
@@ -29,6 +30,7 @@ public class CustomerController {
     @GetMapping(value = "/customer", produces = {"application/json"})
     public ResponseEntity<List<CustomerDto>> getAllCustomers() {
         log.info("REST request to get all Customers");
+
         return ResponseEntity
                 .ok()
                 .body(customerService.findAll());
@@ -37,6 +39,7 @@ public class CustomerController {
     @GetMapping(value = "/customer/{id}", produces = {"application/json"})
     public ResponseEntity<CustomerDto> getCustomerById(@PathVariable(value = "id", required = true) final Long id) {
         log.info("REST request to get Customer : {}", id);
+
         return ResponseEntity
                 .ok()
                 .body(customerService.findById(id));
@@ -45,9 +48,11 @@ public class CustomerController {
     @PutMapping(value = "/customer", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto customerDto) {
         log.info("REST request to update Customer");
+
         if (customerDto == null) {
             throw new CustomerException("Customer data are missing");
         }
+
         return ResponseEntity
                 .ok()
                 .body(customerService.update(customerDto));
@@ -63,6 +68,7 @@ public class CustomerController {
             throw new CustomerException("Customer data are missing");
         }
         customerDto.setId(id);
+
         return ResponseEntity
                 .ok()
                 .body(customerService.partialUpdate(customerDto));
@@ -71,7 +77,9 @@ public class CustomerController {
     @DeleteMapping("/customer/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         log.info("REST request to delete Customer : {}", id);
+
         customerService.delete(id);
+
         return ResponseEntity.noContent().build();
     }
 }
