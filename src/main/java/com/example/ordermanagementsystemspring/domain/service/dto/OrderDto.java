@@ -10,5 +10,4 @@ public class OrderDto {
     private Long id;
     private Date submissionDate;
     private Long customerId;
-    private Long orderLineId;
 }
