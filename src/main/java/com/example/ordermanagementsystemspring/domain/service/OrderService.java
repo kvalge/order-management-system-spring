@@ -47,6 +47,8 @@ public class OrderService {
     }
 
     public List<OrderDto> findByDate(LocalDate date) {
+        log.info("Request to find Order by date : {}", date);
+
         List<Order> orders = orderRepository.findAllBySubmissionDate(date);
         List<OrderDto> orderDtos = orderMapper.toDtoList(orders);
         for (Order order : orders) {
@@ -57,5 +59,11 @@ public class OrderService {
             }
         }
         return orderDtos;
+    }
+
+    public List<OrderDto> findByProduct(Long productId) {
+        log.info("Request to find Order by Product id : {}", productId);
+
+        return null;
     }
 }

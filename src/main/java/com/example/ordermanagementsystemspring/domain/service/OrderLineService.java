@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -70,5 +71,20 @@ public class OrderLineService {
         log.info("Request to delete Order Line by id : {}", id);
 
         orderLineRepository.deleteById(id);
+    }
+
+    public List<OrderLineDto> findByProduct(Long productId) {
+        List<OrderLine> orderLines = orderLineRepository.findAllByProductId(productId);
+        List<OrderLineDto> orderLineDtos = orderLineMapper.toDtoList(orderLines);
+        for (OrderLine orderLine : orderLines) {
+            for (OrderLineDto orderLineDto : orderLineDtos) {
+                if (orderLine.getId() == orderLineDto.getId()) {
+                    orderLineDto.setProductId(orderLine.getProduct().getId());
+                    orderLineDto.setOrderId(orderLine.getOrder().getId());
+                }
+            }
+        }
+
+        return orderLineDtos;
     }
 }
