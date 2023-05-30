@@ -36,7 +36,7 @@ class OrderRepositoryTest {
         customer.setEmail("Customer Email");
         customer.setTelephone("55443322");
 
-        order.setSubmissionDate(LocalDate.ofEpochDay(2023-05-15));
+        order.setSubmissionDate(LocalDate.ofEpochDay(2023 - 05 - 15));
         order.setCustomer(customer);
 
         orders.add(order);
@@ -55,5 +55,9 @@ class OrderRepositoryTest {
 
     @Test
     void findAllByCustomerId() {
+        List<Order> orderList = orderRepository.findAllByCustomerId(customer.getId());
+
+        assertEquals(1, orderList.size());
+        assertEquals("Customer Full Name", orderList.get(0).getCustomer().getFullName());
     }
 }
