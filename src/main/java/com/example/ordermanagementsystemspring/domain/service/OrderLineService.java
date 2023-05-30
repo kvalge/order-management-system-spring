@@ -46,8 +46,8 @@ public class OrderLineService {
         orderLineRepository.save(orderLine);
 
         OrderLineDto dto = orderLineMapper.toDto(orderLine);
-        dto.setProductId(orderLineDto.getProductId());
-        dto.setOrderId(orderLineDto.getOrderId());
+        dto.setProductId(orderLine.getProduct().getId());
+        dto.setOrderId(orderLine.getOrder().getId());
 
         return dto;
     }
