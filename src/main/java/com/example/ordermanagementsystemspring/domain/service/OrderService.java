@@ -105,7 +105,7 @@ public class OrderService {
     }
 
     /**
-     * Deletes all Order Lines of the Order before deleting the Order.
+     * Deletes simultaneously also all Order Lines of the Order.
      */
     public void delete(Long id) {
         log.info("Request to delete Order by id : {}", id);
