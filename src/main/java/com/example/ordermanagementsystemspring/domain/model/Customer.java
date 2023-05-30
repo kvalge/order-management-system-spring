@@ -16,7 +16,7 @@ public class Customer {
     private Long id;
 
     @Column(length = 50, unique = true, nullable = false)
-    private String registrationCode;
+    private String registration_code;
 
     @Column(length = 250, nullable = false)
     private String full_name;
