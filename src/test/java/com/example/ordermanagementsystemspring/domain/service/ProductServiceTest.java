@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,6 +80,14 @@ class ProductServiceTest {
 
     @Test
     void findById() {
+        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
+        when(productRepository.findById(productDto.getId())).thenReturn(Optional.ofNullable(product));
+        when(productMapper.toDto(product)).thenReturn(productDto);
+
+        ProductDto dto = productService.findById(productDto.getId());
+
+        assertNotNull(dto);
+        assertEquals("Product Name", dto.getName());
     }
 
     @Test
