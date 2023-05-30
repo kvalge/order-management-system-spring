@@ -65,6 +65,8 @@ public class CustomerService {
     public CustomerDto update(CustomerDto customerDto) {
         log.info("Request to update Customer : {}", customerDto);
 
+        validationService.CustomerNotFound(customerDto.getId());
+
         Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.update(customer, customerDto);
         customerRepository.save(customer);
@@ -76,6 +78,8 @@ public class CustomerService {
     public CustomerDto partialUpdate(CustomerDto customerDto) {
         log.info("Request to partially update Customer : {}", customerDto);
 
+        validationService.CustomerNotFound(customerDto.getId());
+
         Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.partialUpdate(customer, customerDto);
         customerRepository.save(customer);
@@ -85,6 +89,8 @@ public class CustomerService {
 
     public void delete(Long id) {
         log.info("Request to delete Customer by id : {}", id);
+
+        validationService.CustomerNotFound(id);
 
         customerRepository.deleteById(id);
     }
