@@ -41,7 +41,7 @@ public class CustomerService {
     }
 
     public List<CustomerDto> findAll() {
-        validationService.CustomersNotFound();
+        validationService.customersNotFound();
 
         List<Customer> customers = customerRepository.findAll();
 
@@ -51,7 +51,7 @@ public class CustomerService {
     public CustomerDto findById(Long id) {
         log.info("Request to find Customer by id : {}", id);
 
-        validationService.CustomerNotFound(id);
+        validationService.customerNotFound(id);
 
         Optional<Customer> customer =
                 Optional.ofNullable(customerRepository
@@ -65,7 +65,7 @@ public class CustomerService {
     public CustomerDto update(CustomerDto customerDto) {
         log.info("Request to update Customer : {}", customerDto);
 
-        validationService.CustomerNotFound(customerDto.getId());
+        validationService.customerNotFound(customerDto.getId());
 
         Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.update(customer, customerDto);
@@ -78,7 +78,7 @@ public class CustomerService {
     public CustomerDto partialUpdate(CustomerDto customerDto) {
         log.info("Request to partially update Customer : {}", customerDto);
 
-        validationService.CustomerNotFound(customerDto.getId());
+        validationService.customerNotFound(customerDto.getId());
 
         Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.partialUpdate(customer, customerDto);
@@ -90,7 +90,7 @@ public class CustomerService {
     public void delete(Long id) {
         log.info("Request to delete Customer by id : {}", id);
 
-        validationService.CustomerNotFound(id);
+        validationService.customerNotFound(id);
 
         customerRepository.deleteById(id);
     }

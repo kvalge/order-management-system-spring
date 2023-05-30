@@ -15,14 +15,14 @@ public class CustomerValidationService {
     @Resource
     private CustomerRepository customerRepository;
 
-    public void CustomersNotFound() {
+    public void customersNotFound() {
         List<Customer> customers = customerRepository.findAll();
         if (customers.isEmpty()) {
             throw new CustomerException("Customers not found!");
         }
     }
 
-    public void CustomerNotFound(Long id) {
+    public void customerNotFound(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isEmpty()) {
             throw new CustomerException("Customer id " + id + " not found!");
