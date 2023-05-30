@@ -23,6 +23,7 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "order", orphanRemoval = true)
     private List<OrderLine> orderLines = new ArrayList<>();
 }

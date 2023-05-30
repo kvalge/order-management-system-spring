@@ -2,7 +2,6 @@ package com.example.ordermanagementsystemspring.domain.service;
 
 import com.example.ordermanagementsystemspring.domain.model.Customer;
 import com.example.ordermanagementsystemspring.domain.model.Order;
-import com.example.ordermanagementsystemspring.domain.model.OrderLine;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
 import com.example.ordermanagementsystemspring.domain.repository.OrderLineRepository;
 import com.example.ordermanagementsystemspring.domain.repository.OrderRepository;
@@ -110,14 +109,6 @@ public class OrderService {
      */
     public void delete(Long id) {
         log.info("Request to delete Order by id : {}", id);
-
-        List<OrderLine> orderLines = orderLineRepository.findAll();
-
-        for (OrderLine orderLine : orderLines) {
-            if (orderLine.getOrder().getId() == id) {
-                orderLineService.delete(orderLine.getId());
-            }
-        }
 
         orderRepository.deleteById(id);
     }
