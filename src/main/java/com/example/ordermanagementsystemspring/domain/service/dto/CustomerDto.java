@@ -7,7 +7,7 @@ public class CustomerDto {
 
     private Long id;
     private String registrationCode;
-    private String full_name;
+    private String fullName;
     private String email;
     private String telephone;
 }

@@ -16,10 +16,10 @@ public class Customer {
     private Long id;
 
     @Column(length = 50, unique = true, nullable = false)
-    private String registration_code;
+    private String registrationCode;
 
     @Column(length = 250, nullable = false)
-    private String full_name;
+    private String fullName;
 
     @Column(length = 50, unique = true, nullable = false)
     private String email;
