@@ -9,6 +9,8 @@ import com.example.ordermanagementsystemspring.domain.repository.OrderRepository
 import com.example.ordermanagementsystemspring.domain.repository.ProductRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
 import com.example.ordermanagementsystemspring.domain.service.mapper.OrderLineMapper;
+import com.example.ordermanagementsystemspring.domain.validation.OrderLineValidationService;
+import com.example.ordermanagementsystemspring.domain.validation.ProductValidationService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,12 @@ public class OrderLineService {
     @Resource
     private OrderRepository orderRepository;
 
+    @Resource
+    private OrderLineValidationService orderLineValidationService;
+
+    @Resource
+    private ProductValidationService productValidationService;
+
     public OrderLineDto save(OrderLineDto orderLineDto) {
         log.info("Request to save Order Line : {}", orderLineDto);
 
@@ -55,7 +63,11 @@ public class OrderLineService {
     public List<OrderLineDto> findByProduct(Long productId) {
         log.info("Request to find Order Line by Product id : {}", productId);
 
+        productValidationService.productNotFound(productId);
+        orderLineValidationService.orderLinesByProductNotFound(productId);
+
         List<OrderLine> orderLines = orderLineRepository.findAllByProductId(productId);
+
         List<OrderLineDto> orderLineDtos = orderLineMapper.toDtoList(orderLines);
         for (OrderLine orderLine : orderLines) {
             for (OrderLineDto orderLineDto : orderLineDtos) {
@@ -72,6 +84,8 @@ public class OrderLineService {
     public OrderLineDto update(OrderLineDto orderLineDto) {
         log.info("Request to update Order Line : {}", orderLineDto);
 
+        orderLineValidationService.orderLineNotFound(orderLineDto.getId());
+
         OrderLine orderLine = orderLineRepository
                 .findById(orderLineDto.getId())
                 .orElseThrow(() -> new OrderLineException("Order Line #" + orderLineDto.getId() + " not found"));
@@ -87,6 +101,8 @@ public class OrderLineService {
 
     public void delete(Long id) {
         log.info("Request to delete Order Line by id : {}", id);
+
+        orderLineValidationService.orderLineNotFound(id);
 
         orderLineRepository.deleteById(id);
     }
