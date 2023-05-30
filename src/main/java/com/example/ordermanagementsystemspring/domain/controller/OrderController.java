@@ -27,6 +27,24 @@ public class OrderController {
                 .body(orderService.save(orderDto));
     }
 
+    @GetMapping(value = "/order", produces = {"application/json"})
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        log.info("REST request to get all Orders");
+
+        return ResponseEntity
+                .ok()
+                .body(orderService.findAll());
+    }
+
+    @GetMapping(value = "/order/{id}", produces = {"application/json"})
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable(value = "id", required = true) final Long id) {
+        log.info("REST request to get Order : {}", id);
+
+        return ResponseEntity
+                .ok()
+                .body(orderService.findById(id));
+    }
+
     @GetMapping(value = "/order/date", produces = {"application/json"})
     public ResponseEntity<List<OrderDto>> getOrdersByDate(@RequestParam LocalDate date) {
         log.info("REST request to get Orders by date");

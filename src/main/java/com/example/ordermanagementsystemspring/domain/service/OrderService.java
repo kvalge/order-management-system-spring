@@ -54,6 +54,30 @@ public class OrderService {
         return dto;
     }
 
+    public List<OrderDto> findAll() {
+        List<Order> orders = orderRepository.findAll();
+
+        List<OrderDto> orderDtos = orderMapper.toDtoList(orders);
+        for (Order order : orders) {
+            for (OrderDto orderDto : orderDtos) {
+                if (Objects.equals(order.getId(), orderDto.getId())) {
+                    orderDto.setCustomerId(order.getCustomer().getId());
+                }
+            }
+        }
+        return orderDtos;
+    }
+
+    public OrderDto findById(Long id) {
+        log.info("Request to find Order by id : {}", id);
+
+        Optional<Order> order = orderRepository.findById(id);
+        OrderDto orderDto = orderMapper.toDto(order.get());
+        orderDto.setCustomerId(order.get().getCustomer().getId());
+
+        return orderDto;
+    }
+
     public List<OrderDto> findByDate(LocalDate date) {
         log.info("Request to find Order by date : {}", date);
 
