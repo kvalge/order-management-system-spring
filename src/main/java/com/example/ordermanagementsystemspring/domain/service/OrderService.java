@@ -3,11 +3,14 @@ package com.example.ordermanagementsystemspring.domain.service;
 import com.example.ordermanagementsystemspring.domain.model.Customer;
 import com.example.ordermanagementsystemspring.domain.model.Order;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
-import com.example.ordermanagementsystemspring.domain.repository.OrderLineRepository;
 import com.example.ordermanagementsystemspring.domain.repository.OrderRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
 import com.example.ordermanagementsystemspring.domain.service.mapper.OrderMapper;
+import com.example.ordermanagementsystemspring.domain.validation.CustomerValidationService;
+import com.example.ordermanagementsystemspring.domain.validation.OrderLineValidationService;
+import com.example.ordermanagementsystemspring.domain.validation.OrderValidationService;
+import com.example.ordermanagementsystemspring.domain.validation.ProductValidationService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +40,16 @@ public class OrderService {
     private OrderLineService orderLineService;
 
     @Resource
-    private OrderLineRepository orderLineRepository;
+    private OrderValidationService orderValidationService;
+
+    @Resource
+    private ProductValidationService productValidationService;
+
+    @Resource
+    private OrderLineValidationService orderLineValidationService;
+
+    @Resource
+    private CustomerValidationService customerValidationService;
 
     public OrderDto save(OrderDto orderDto) {
         log.info("Request to save Order : {}", orderDto);
@@ -55,6 +67,8 @@ public class OrderService {
     }
 
     public List<OrderDto> findAll() {
+        orderValidationService.ordersNotFound();
+
         List<Order> orders = orderRepository.findAll();
 
         List<OrderDto> orderDtos = orderMapper.toDtoList(orders);
@@ -71,6 +85,8 @@ public class OrderService {
     public OrderDto findById(Long id) {
         log.info("Request to find Order by id : {}", id);
 
+        orderValidationService.orderNotFound(id);
+
         Optional<Order> order = orderRepository.findById(id);
         OrderDto orderDto = orderMapper.toDto(order.get());
         orderDto.setCustomerId(order.get().getCustomer().getId());
@@ -80,6 +96,8 @@ public class OrderService {
 
     public List<OrderDto> findByDate(LocalDate date) {
         log.info("Request to find Order by date : {}", date);
+
+        orderValidationService.ordersByDateNotFound(date);
 
         List<Order> orders = orderRepository.findAllBySubmissionDate(date);
         List<OrderDto> orderDtos = orderMapper.toDtoList(orders);
@@ -95,6 +113,9 @@ public class OrderService {
 
     public List<OrderDto> findByProduct(Long productId) {
         log.info("Request to find Order by Product id : {}", productId);
+
+        productValidationService.productNotFound(productId);
+        orderLineValidationService.orderLinesByProductNotFound(productId);
 
         List<OrderLineDto> orderLineDtos = orderLineService.findByProduct(productId);
 
@@ -115,6 +136,9 @@ public class OrderService {
     public List<OrderDto> findByCustomer(Long customerId) {
         log.info("Request to find Order by Customer id : {}", customerId);
 
+        customerValidationService.customerNotFound(customerId);
+        orderValidationService.ordersByCustomerNotFound(customerId);
+
         List<Order> orders = orderRepository.findAllByCustomerId(customerId);
 
         List<OrderDto> orderDtos = new ArrayList<>();
@@ -133,6 +157,8 @@ public class OrderService {
      */
     public void delete(Long id) {
         log.info("Request to delete Order by id : {}", id);
+
+        orderValidationService.orderNotFound(id);
 
         orderRepository.deleteById(id);
     }
