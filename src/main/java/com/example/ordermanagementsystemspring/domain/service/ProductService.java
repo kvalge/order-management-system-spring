@@ -6,6 +6,7 @@ import com.example.ordermanagementsystemspring.domain.model.Product;
 import com.example.ordermanagementsystemspring.domain.repository.ProductRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductDto;
 import com.example.ordermanagementsystemspring.domain.service.mapper.ProductMapper;
+import com.example.ordermanagementsystemspring.domain.validation.ProductValidationService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class ProductService {
     @Resource
     private ProductRepository productRepository;
 
+    @Resource
+    private ProductValidationService validationService;
+
     /**
      * Inserted price of the product is given in cents, returned price is calculated to euros.
      */
@@ -42,6 +46,8 @@ public class ProductService {
     }
 
     public List<ProductDto> findAll() {
+        validationService.productsNotFound();
+
         List<Product> products = productRepository.findAll();
 
         return productMapper.toDtoList(products);
@@ -49,6 +55,8 @@ public class ProductService {
 
     public ProductDto findById(Long id) {
         log.info("Request to find Product by id : {}", id);
+
+        validationService.productNotFound(id);
 
         Optional<Product> product =
                 Optional.ofNullable(productRepository
@@ -64,6 +72,8 @@ public class ProductService {
      */
     public ProductDto update(ProductDto productDto) {
         log.info("Request to update Product : {}", productDto);
+
+        validationService.productNotFound(productDto.getId());
 
         Product product = productRepository
                 .findById(productDto.getId())
@@ -82,6 +92,8 @@ public class ProductService {
     public ProductDto partialUpdate(ProductDto productDto) {
         log.info("Request to partially update Product : {}", productDto);
 
+        validationService.productNotFound(productDto.getId());
+
         Product product = productRepository
                 .findById(productDto.getId())
                 .orElseThrow(() -> new ProductException("Product #" + productDto.getId() + " not found"));
@@ -95,6 +107,8 @@ public class ProductService {
 
     public void delete(Long id) {
         log.info("Request to delete Product by id : {}", id);
+
+        validationService.productNotFound(id);
 
         productRepository.deleteById(id);
     }
