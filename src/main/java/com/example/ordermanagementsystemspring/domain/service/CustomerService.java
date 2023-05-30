@@ -6,7 +6,7 @@ import com.example.ordermanagementsystemspring.domain.model.Customer;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.CustomerDto;
 import com.example.ordermanagementsystemspring.domain.service.mapper.CustomerMapper;
-import com.example.ordermanagementsystemspring.domain.validation.ValidationService;
+import com.example.ordermanagementsystemspring.domain.validation.CustomerValidationService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     @Resource
-    private ValidationService validationService;
+    private CustomerValidationService validationService;
 
     public CustomerDto save(CustomerDto customerDto) {
         log.info("Request to save Customer : {}", customerDto);
@@ -50,6 +50,8 @@ public class CustomerService {
 
     public CustomerDto findById(Long id) {
         log.info("Request to find Customer by id : {}", id);
+
+        validationService.CustomerNotFound(id);
 
         Optional<Customer> customer =
                 Optional.ofNullable(customerRepository

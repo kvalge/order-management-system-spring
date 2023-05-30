@@ -7,9 +7,10 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ValidationService {
+public class CustomerValidationService {
 
     @Resource
     private CustomerRepository customerRepository;
@@ -18,6 +19,13 @@ public class ValidationService {
         List<Customer> customers = customerRepository.findAll();
         if (customers.isEmpty()) {
             throw new CustomerException("Customers not found!");
+        }
+    }
+
+    public void CustomerNotFound(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.isEmpty()) {
+            throw new CustomerException("Customer id " + id + " not found!");
         }
     }
 }
