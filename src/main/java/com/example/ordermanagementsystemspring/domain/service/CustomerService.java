@@ -5,6 +5,7 @@ import com.example.ordermanagementsystemspring.domain.exception.ExceptionCodes;
 import com.example.ordermanagementsystemspring.domain.model.Customer;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.CustomerDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.CustomerRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.CustomerMapper;
 import com.example.ordermanagementsystemspring.domain.validation.CustomerValidationService;
 import jakarta.annotation.Resource;
@@ -30,10 +31,10 @@ public class CustomerService {
     @Resource
     private CustomerValidationService validationService;
 
-    public CustomerDto save(CustomerDto customerDto) {
-        log.info("Request to save Customer : {}", customerDto);
+    public CustomerDto save(CustomerRequest request) {
+        log.info("Request to save Customer : {}", request);
 
-        Customer customer = customerMapper.toEntity(customerDto);
+        Customer customer = customerMapper.requestToEntity(request);
         customer.setRegistrationCode(UUID.randomUUID().toString());
         customer = customerRepository.save(customer);
 

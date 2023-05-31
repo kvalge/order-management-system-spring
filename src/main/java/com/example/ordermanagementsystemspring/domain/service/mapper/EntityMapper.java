@@ -5,12 +5,13 @@ import org.mapstruct.*;
 import java.util.List;
 import java.util.Set;
 
-public interface EntityMapper<E, D>{
+public interface EntityMapper<E, D> {
 
     E toEntity(D dto);
 
     @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
     List<E> toEntityList(List<D> entityList);
+
     @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
     Set<E> toEntitySet(Set<D> entityList);
 
@@ -27,5 +28,5 @@ public interface EntityMapper<E, D>{
     void partialUpdate(@MappingTarget E entity, D dto);
 
     @Named("update")
-    void update(@MappingTarget E entity,  D dto);
+    void update(@MappingTarget E entity, D dto);
 }
