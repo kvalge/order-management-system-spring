@@ -1,6 +1,5 @@
 package com.example.ordermanagementsystemspring.domain.validation;
 
-import com.example.ordermanagementsystemspring.domain.exception.CustomerException;
 import com.example.ordermanagementsystemspring.domain.exception.ProductException;
 import com.example.ordermanagementsystemspring.domain.model.Product;
 import com.example.ordermanagementsystemspring.domain.repository.ProductRepository;
@@ -20,7 +19,7 @@ public class ProductValidationService {
 
     public void productDataNotFound(ProductRequest request) {
         if (request.getName() == null || request.getUnitPrice() == null) {
-            throw new CustomerException("Product data not found!");
+            throw new ProductException("Product data not found!");
         }
     }
 
@@ -29,7 +28,7 @@ public class ProductValidationService {
                 productDto.getSkuCode() == null ||
                 productDto.getName() == null ||
                 productDto.getUnitPrice() == null) {
-            throw new CustomerException("Product data not found!");
+            throw new ProductException("Product data not found!");
         }
     }
 
