@@ -3,6 +3,7 @@ package com.example.ordermanagementsystemspring.domain.validation;
 import com.example.ordermanagementsystemspring.domain.exception.OrderLineException;
 import com.example.ordermanagementsystemspring.domain.model.OrderLine;
 import com.example.ordermanagementsystemspring.domain.repository.OrderLineRepository;
+import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineRequest;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,15 @@ public class OrderLineValidationService {
 
     public void OrderLineDataNotFound(OrderLineRequest request) {
         if (request.getQuantity() == 0 || request.getProductId() == 0 || request.getOrderId() == 0) {
+            throw new OrderLineException("Order Line data not found!");
+        }
+    }
+
+    public void orderLineDtoDataNotFound(OrderLineDto orderLineDto) {
+        if (orderLineDto.getId() == null ||
+                orderLineDto.getQuantity() == null ||
+                orderLineDto.getProductId() == null ||
+                orderLineDto.getOrderId() == null) {
             throw new OrderLineException("Order Line data not found!");
         }
     }

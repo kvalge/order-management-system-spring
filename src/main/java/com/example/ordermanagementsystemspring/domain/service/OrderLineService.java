@@ -81,7 +81,9 @@ public class OrderLineService {
     public OrderLineDto update(OrderLineDto orderLineDto) {
         log.info("Request to update Order Line : {}", orderLineDto);
 
-        orderLineValidationService.orderLineNotFound(orderLineDto.getId());
+        orderLineValidationService.orderLineDtoDataNotFound(orderLineDto);
+        productValidationService.productNotFound(orderLineDto.getProductId());
+        orderValidationService.orderNotFound(orderLineDto.getOrderId());
 
         OrderLine orderLine = orderLineRepository
                 .findById(orderLineDto.getId())
