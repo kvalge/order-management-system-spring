@@ -54,9 +54,7 @@ public class OrderLineService {
         orderLine.setOrder(order.orElse(null));
         orderLineRepository.save(orderLine);
 
-        OrderLineDto dto = orderLineMapper.toDto(orderLine);
-
-        return dto;
+        return orderLineMapper.toDto(orderLine);
     }
 
     public List<OrderLineDto> findByProduct(Long productId) {
