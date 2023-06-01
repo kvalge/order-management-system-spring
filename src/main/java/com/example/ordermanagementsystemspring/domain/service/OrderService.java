@@ -6,6 +6,7 @@ import com.example.ordermanagementsystemspring.domain.repository.CustomerReposit
 import com.example.ordermanagementsystemspring.domain.repository.OrderRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.OrderRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.OrderMapper;
 import com.example.ordermanagementsystemspring.domain.validation.CustomerValidationService;
 import com.example.ordermanagementsystemspring.domain.validation.OrderLineValidationService;
@@ -51,19 +52,17 @@ public class OrderService {
     @Resource
     private CustomerValidationService customerValidationService;
 
-    public OrderDto save(OrderDto orderDto) {
-        log.info("Request to save Order : {}", orderDto);
+    public OrderDto save(OrderRequest request) {
+        log.info("Request to save Order : {}", request);
 
-        Order order = orderMapper.toEntity(orderDto);
-        Optional<Customer> customer = customerRepository.findById(orderDto.getCustomerId());
-        order.setCustomer(customer.get());
+        Order order = orderMapper.requestToOrder(request);
+
+        Optional<Customer> customer = customerRepository.findById(request.getCustomerId());
+        order.setCustomer(customer.orElse(null));
         order.setSubmissionDate(LocalDate.now());
         orderRepository.save(order);
 
-        OrderDto dto = orderMapper.toDto(order);
-        dto.setCustomerId(customer.get().getId());
-
-        return dto;
+        return orderMapper.toDto(order);
     }
 
     public List<OrderDto> findAll() {

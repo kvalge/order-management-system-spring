@@ -2,6 +2,7 @@ package com.example.ordermanagementsystemspring.domain.controller;
 
 import com.example.ordermanagementsystemspring.domain.service.OrderService;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.OrderRequest;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,12 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping(value = "/order", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderRequest request) {
         log.info("REST request to create Order");
 
         return ResponseEntity
                 .ok()
-                .body(orderService.save(orderDto));
+                .body(orderService.save(request));
     }
 
     @GetMapping(value = "/order", produces = {"application/json"})
