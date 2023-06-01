@@ -3,6 +3,7 @@ package com.example.ordermanagementsystemspring.domain.controller;
 import com.example.ordermanagementsystemspring.domain.exception.ProductException;
 import com.example.ordermanagementsystemspring.domain.service.ProductService;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.ProductRequest;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,12 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping(value = "/product", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductRequest request) {
         log.info("REST request to create Product");
 
         return ResponseEntity
                 .ok()
-                .body(productService.save(productDto));
+                .body(productService.save(request));
     }
 
     @GetMapping(value = "/product", produces = {"application/json"})

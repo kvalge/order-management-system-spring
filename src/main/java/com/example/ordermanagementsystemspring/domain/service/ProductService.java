@@ -5,6 +5,7 @@ import com.example.ordermanagementsystemspring.domain.exception.ProductException
 import com.example.ordermanagementsystemspring.domain.model.Product;
 import com.example.ordermanagementsystemspring.domain.repository.ProductRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.ProductRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.ProductMapper;
 import com.example.ordermanagementsystemspring.domain.validation.ProductValidationService;
 import jakarta.annotation.Resource;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -33,14 +33,13 @@ public class ProductService {
     /**
      * Inserted price of the product is given in cents, returned price is calculated to euros.
      */
-    public ProductDto save(ProductDto productDto) {
-        log.info("Request to save Product : {}", productDto);
+    public ProductDto save(ProductRequest request) {
+        log.info("Request to save Product : {}", request);
 
-        Product product = productMapper.toEntity(productDto);
-        product.setSkuCode(UUID.randomUUID().toString());
-        product = productRepository.save(product);
-        float price = (float) Math.round((productDto.getUnitPrice() / 100) * 100) / 100;
+        Product product = productMapper.requestToEntity(request);
+        float price = (float) Math.round((product.getUnitPrice() / 100) * 100) / 100;
         product.setUnitPrice(price);
+        product = productRepository.save(product);
 
         return productMapper.toDto(product);
     }
