@@ -3,6 +3,7 @@ package com.example.ordermanagementsystemspring.domain.service;
 import com.example.ordermanagementsystemspring.domain.model.Product;
 import com.example.ordermanagementsystemspring.domain.repository.ProductRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.ProductRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.ProductMapper;
 import com.example.ordermanagementsystemspring.domain.validation.ProductValidationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +38,7 @@ class ProductServiceTest {
     ProductValidationService validationService;
 
     Product product = new Product();
+    ProductRequest request = new ProductRequest();
     ProductDto productDto = new ProductDto();
     List<Product> products = new ArrayList<>();
     List<ProductDto> productDtos = new ArrayList<>();
@@ -48,6 +50,9 @@ class ProductServiceTest {
 
         products.add(product);
 
+        request.setName("Product Name");
+        request.setUnitPrice(11.11F);
+
         productDto.setName("Product Name");
         productDto.setUnitPrice(11.11F);
 
@@ -56,11 +61,11 @@ class ProductServiceTest {
 
     @Test
     void save() {
-        when(productMapper.toEntity(productDto)).thenReturn(product);
+        when(productMapper.requestToEntity(request)).thenReturn(product);
         when(productRepository.save(Mockito.any(Product.class))).thenReturn(product);
         when(productMapper.toDto(product)).thenReturn(productDto);
 
-        ProductDto dto = productService.save(productDto);
+        ProductDto dto = productService.save(request);
 
         assertNotNull(dto);
         assertEquals(productDto.getName(), dto.getName());
