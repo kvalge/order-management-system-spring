@@ -36,6 +36,8 @@ public class ProductService {
     public ProductDto save(ProductRequest request) {
         log.info("Request to save Product : {}", request);
 
+        validationService.productDataNotFound(request);
+
         Product product = productMapper.requestToEntity(request);
         float price = (float) Math.round((product.getUnitPrice() / 100) * 100) / 100;
         product.setUnitPrice(price);
@@ -45,6 +47,8 @@ public class ProductService {
     }
 
     public List<ProductDto> findAll() {
+        log.info("Request to find all products");
+
         validationService.productsNotFound();
 
         List<Product> products = productRepository.findAll();
@@ -55,15 +59,13 @@ public class ProductService {
     public ProductDto findById(Long id) {
         log.info("Request to find Product by id : {}", id);
 
-        validationService.productNotFound(id);
-
         Optional<Product> product =
                 Optional.ofNullable(productRepository
                         .findById(id)
                         .orElseThrow(() -> new ProductException(
                                 "Product #" + id + " not found", ExceptionCodes.PRODUCT_NOT_FOUND)));
 
-        return productMapper.toDto(product.get());
+        return productMapper.toDto(product.orElse(null));
     }
 
     /**
@@ -72,7 +74,7 @@ public class ProductService {
     public ProductDto update(ProductDto productDto) {
         log.info("Request to update Product : {}", productDto);
 
-        validationService.productNotFound(productDto.getId());
+        validationService.productDtoDataNotFound(productDto);
 
         Product product = productRepository
                 .findById(productDto.getId())
