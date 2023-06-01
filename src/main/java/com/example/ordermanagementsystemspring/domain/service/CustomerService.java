@@ -34,6 +34,7 @@ public class CustomerService {
         log.info("Request to save Customer : {}", request);
 
         validationService.customerDataNotFound(request);
+        validationService.customerAlreadyExists(request);
 
         Customer customer = customerMapper.requestToEntity(request);
         customer = customerRepository.save(customer);
