@@ -81,9 +81,9 @@ public class CustomerService {
     public CustomerDto partialUpdate(CustomerDto customerDto) {
         log.info("Request to partially update Customer : {}", customerDto);
 
-        validationService.customerDtoDataNotFound(customerDto);
-
-        Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
+        Customer customer = customerRepository
+                .findById(customerDto.getId())
+                .orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.partialUpdate(customer, customerDto);
         customerRepository.save(customer);
 
