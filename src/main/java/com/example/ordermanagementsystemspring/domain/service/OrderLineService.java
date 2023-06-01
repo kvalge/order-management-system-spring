@@ -11,6 +11,7 @@ import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.OrderLineMapper;
 import com.example.ordermanagementsystemspring.domain.validation.OrderLineValidationService;
+import com.example.ordermanagementsystemspring.domain.validation.OrderValidationService;
 import com.example.ordermanagementsystemspring.domain.validation.ProductValidationService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -44,14 +45,24 @@ public class OrderLineService {
     @Resource
     private ProductValidationService productValidationService;
 
+    @Resource
+    private OrderValidationService orderValidationService;
+
     public OrderLineDto save(OrderLineRequest request) {
         log.info("Request to save Order Line : {}", request);
 
+        orderLineValidationService.OrderLineDataNotFound(request);
+        productValidationService.productNotFound(request.getProductId());
+        orderValidationService.orderNotFound(request.getOrderId());
+
         OrderLine orderLine = orderLineMapper.requestToEntity(request);
+
         Optional<Product> product = productRepository.findById(request.getProductId());
         orderLine.setProduct(product.orElse(null));
+
         Optional<Order> order = orderRepository.findById(request.getOrderId());
         orderLine.setOrder(order.orElse(null));
+
         orderLineRepository.save(orderLine);
 
         return orderLineMapper.toDto(orderLine);
