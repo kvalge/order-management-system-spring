@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -76,7 +75,7 @@ public class OrderLineService {
 
         List<OrderLine> orderLines = orderLineRepository.findAllByProductId(productId);
 
-        List<OrderLineDto> orderLineDtos = orderLineMapper.toDtoList(orderLines);
+/*        List<OrderLineDto> orderLineDtos = orderLineMapper.toDtoList(orderLines);
         for (OrderLine orderLine : orderLines) {
             for (OrderLineDto orderLineDto : orderLineDtos) {
                 if (Objects.equals(orderLine.getId(), orderLineDto.getId())) {
@@ -84,9 +83,9 @@ public class OrderLineService {
                     orderLineDto.setOrderId(orderLine.getOrder().getId());
                 }
             }
-        }
+        }*/
 
-        return orderLineDtos;
+        return orderLineMapper.toDtoList(orderLines);
     }
 
     public OrderLineDto update(OrderLineDto orderLineDto) {
