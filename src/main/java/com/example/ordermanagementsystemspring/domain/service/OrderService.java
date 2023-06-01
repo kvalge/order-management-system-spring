@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -70,15 +69,7 @@ public class OrderService {
 
         List<Order> orders = orderRepository.findAll();
 
-        List<OrderDto> orderDtos = orderMapper.toDtoList(orders);
-        for (Order order : orders) {
-            for (OrderDto orderDto : orderDtos) {
-                if (Objects.equals(order.getId(), orderDto.getId())) {
-                    orderDto.setCustomerId(order.getCustomer().getId());
-                }
-            }
-        }
-        return orderDtos;
+        return orderMapper.toDtoList(orders);
     }
 
     public OrderDto findById(Long id) {
@@ -87,10 +78,8 @@ public class OrderService {
         orderValidationService.orderNotFound(id);
 
         Optional<Order> order = orderRepository.findById(id);
-        OrderDto orderDto = orderMapper.toDto(order.get());
-        orderDto.setCustomerId(order.get().getCustomer().getId());
 
-        return orderDto;
+        return orderMapper.toDto(order.orElse(null));
     }
 
     public List<OrderDto> findByDate(LocalDate date) {
@@ -99,15 +88,8 @@ public class OrderService {
         orderValidationService.ordersByDateNotFound(date);
 
         List<Order> orders = orderRepository.findAllBySubmissionDate(date);
-        List<OrderDto> orderDtos = orderMapper.toDtoList(orders);
-        for (Order order : orders) {
-            for (OrderDto orderDto : orderDtos) {
-                if (Objects.equals(order.getId(), orderDto.getId())) {
-                    orderDto.setCustomerId(order.getCustomer().getId());
-                }
-            }
-        }
-        return orderDtos;
+
+        return orderMapper.toDtoList(orders);
     }
 
     public List<OrderDto> findByProduct(Long productId) {
@@ -123,10 +105,8 @@ public class OrderService {
         for (OrderLineDto orderLineDto : orderLineDtos) {
             Long orderId = orderLineDto.getOrderId();
             Optional<Order> order = orderRepository.findById(orderId);
-            OrderDto orderDto = orderMapper.toDto(order.get());
-            orderDto.setCustomerId(order.get().getCustomer().getId());
-            orderDto.setSubmissionDate(order.get().getSubmissionDate());
-            orderDtos.add(orderDto);
+            OrderDto dto = orderMapper.toDto(order.orElse(null));
+            orderDtos.add(dto);
         }
 
         return orderDtos;
