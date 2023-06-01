@@ -8,6 +8,7 @@ import com.example.ordermanagementsystemspring.domain.repository.OrderLineReposi
 import com.example.ordermanagementsystemspring.domain.repository.OrderRepository;
 import com.example.ordermanagementsystemspring.domain.repository.ProductRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.OrderLineMapper;
 import com.example.ordermanagementsystemspring.domain.validation.OrderLineValidationService;
 import com.example.ordermanagementsystemspring.domain.validation.ProductValidationService;
@@ -43,19 +44,17 @@ public class OrderLineService {
     @Resource
     private ProductValidationService productValidationService;
 
-    public OrderLineDto save(OrderLineDto orderLineDto) {
-        log.info("Request to save Order Line : {}", orderLineDto);
+    public OrderLineDto save(OrderLineRequest request) {
+        log.info("Request to save Order Line : {}", request);
 
-        OrderLine orderLine = orderLineMapper.toEntity(orderLineDto);
-        Optional<Product> product = productRepository.findById(orderLineDto.getProductId());
-        orderLine.setProduct(product.get());
-        Optional<Order> order = orderRepository.findById(orderLineDto.getOrderId());
-        orderLine.setOrder(order.get());
+        OrderLine orderLine = orderLineMapper.requestToEntity(request);
+        Optional<Product> product = productRepository.findById(request.getProductId());
+        orderLine.setProduct(product.orElse(null));
+        Optional<Order> order = orderRepository.findById(request.getOrderId());
+        orderLine.setOrder(order.orElse(null));
         orderLineRepository.save(orderLine);
 
         OrderLineDto dto = orderLineMapper.toDto(orderLine);
-        dto.setProductId(orderLine.getProduct().getId());
-        dto.setOrderId(orderLine.getOrder().getId());
 
         return dto;
     }

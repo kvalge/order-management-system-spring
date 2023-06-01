@@ -3,6 +3,7 @@ package com.example.ordermanagementsystemspring.domain.controller;
 import com.example.ordermanagementsystemspring.domain.exception.OrderLineException;
 import com.example.ordermanagementsystemspring.domain.service.OrderLineService;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineRequest;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,12 @@ public class OrderLineController {
     private OrderLineService orderLineService;
 
     @PostMapping(value = "/ordeline", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<OrderLineDto> createOrderLine(@RequestBody OrderLineDto orderLineDto) {
+    public ResponseEntity<OrderLineDto> createOrderLine(@RequestBody OrderLineRequest request) {
         log.info("REST request to create Order Line");
 
         return ResponseEntity
                 .ok()
-                .body(orderLineService.save(orderLineDto));
+                .body(orderLineService.save(request));
     }
 
     @GetMapping(value = "/orderline/product", produces = {"application/json"})
