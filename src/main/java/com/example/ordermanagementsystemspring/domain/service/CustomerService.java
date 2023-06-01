@@ -43,6 +43,8 @@ public class CustomerService {
     }
 
     public List<CustomerDto> findAll() {
+        log.info("Request to find all customers");
+
         validationService.customersNotFound();
 
         List<Customer> customers = customerRepository.findAll();
@@ -53,23 +55,21 @@ public class CustomerService {
     public CustomerDto findById(Long id) {
         log.info("Request to find Customer by id : {}", id);
 
-        validationService.customerNotFound(id);
-
         Optional<Customer> customer =
                 Optional.ofNullable(customerRepository
                         .findById(id)
                         .orElseThrow(() -> new CustomerException(
                                 "Customer #" + id + " not found", ExceptionCodes.CUSTOMER_NOT_FOUND)));
 
-        return customerMapper.toDto(customer.get());
+        return customerMapper.toDto(customer.orElse(null));
     }
 
     public CustomerDto update(CustomerDto customerDto) {
         log.info("Request to update Customer : {}", customerDto);
 
-        validationService.customerNotFound(customerDto.getId());
-
-        Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
+        Customer customer = customerRepository
+                .findById(customerDto.getId())
+                .orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.update(customer, customerDto);
         customerRepository.save(customer);
 
@@ -79,8 +79,6 @@ public class CustomerService {
 
     public CustomerDto partialUpdate(CustomerDto customerDto) {
         log.info("Request to partially update Customer : {}", customerDto);
-
-        validationService.customerNotFound(customerDto.getId());
 
         Customer customer = customerRepository.findById(customerDto.getId()).orElseThrow(() -> new CustomerException("Customer #" + customerDto.getId() + " not found"));
         customerMapper.partialUpdate(customer, customerDto);

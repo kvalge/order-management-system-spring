@@ -17,22 +17,6 @@ public class CustomerValidationService {
     @Resource
     private CustomerRepository customerRepository;
 
-    public void customersNotFound() {
-        List<Customer> customers = customerRepository.findAll();
-
-        if (customers.isEmpty()) {
-            throw new CustomerException("Customers not found!");
-        }
-    }
-
-    public void customerNotFound(Long id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-
-        if (customer.isEmpty()) {
-            throw new CustomerException("Customer id " + id + " not found!");
-        }
-    }
-
     public void customerDataNotFound(CustomerRequest request) {
         if (request.getFullName() == null || request.getEmail() == null || request.getTelephone() == null) {
             throw new CustomerException("Customer data not found!");
@@ -48,6 +32,22 @@ public class CustomerValidationService {
                     Objects.equals(customer.getTelephone(), request.getTelephone())) {
                 throw new CustomerException("Customer data already exists!");
             }
+        }
+    }
+
+    public void customersNotFound() {
+        List<Customer> customers = customerRepository.findAll();
+
+        if (customers.isEmpty()) {
+            throw new CustomerException("Customers not found!");
+        }
+    }
+
+    public void customerNotFound(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+
+        if (customer.isEmpty()) {
+            throw new CustomerException("Customer id " + id + " not found!");
         }
     }
 }
