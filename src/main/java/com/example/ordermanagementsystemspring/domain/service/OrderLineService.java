@@ -75,16 +75,6 @@ public class OrderLineService {
 
         List<OrderLine> orderLines = orderLineRepository.findAllByProductId(productId);
 
-/*        List<OrderLineDto> orderLineDtos = orderLineMapper.toDtoList(orderLines);
-        for (OrderLine orderLine : orderLines) {
-            for (OrderLineDto orderLineDto : orderLineDtos) {
-                if (Objects.equals(orderLine.getId(), orderLineDto.getId())) {
-                    orderLineDto.setProductId(orderLine.getProduct().getId());
-                    orderLineDto.setOrderId(orderLine.getOrder().getId());
-                }
-            }
-        }*/
-
         return orderLineMapper.toDtoList(orderLines);
     }
 
