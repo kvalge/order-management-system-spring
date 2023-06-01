@@ -3,6 +3,7 @@ package com.example.ordermanagementsystemspring.domain.validation;
 import com.example.ordermanagementsystemspring.domain.exception.CustomerException;
 import com.example.ordermanagementsystemspring.domain.model.Customer;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
+import com.example.ordermanagementsystemspring.domain.service.dto.CustomerDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.CustomerRequest;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,16 @@ public class CustomerValidationService {
 
     public void customerDataNotFound(CustomerRequest request) {
         if (request.getFullName() == null || request.getEmail() == null || request.getTelephone() == null) {
+            throw new CustomerException("Customer data not found!");
+        }
+    }
+
+    public void customerDtoDataNotFound(CustomerDto customerDto) {
+        if (customerDto.getId() == null ||
+                customerDto.getRegistrationCode() == null ||
+                customerDto.getFullName() == null ||
+                customerDto.getEmail() == null ||
+                customerDto.getTelephone() == null) {
             throw new CustomerException("Customer data not found!");
         }
     }
