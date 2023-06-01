@@ -33,6 +33,8 @@ public class CustomerService {
     public CustomerDto save(CustomerRequest request) {
         log.info("Request to save Customer : {}", request);
 
+        validationService.customerDataNotFound(request);
+
         Customer customer = customerMapper.requestToEntity(request);
         customer = customerRepository.save(customer);
 
