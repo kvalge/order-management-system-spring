@@ -47,7 +47,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/order/date", produces = {"application/json"})
-    public ResponseEntity<List<OrderDto>> getOrdersByDate(@RequestParam LocalDate date) {
+    public ResponseEntity<List<OrderDto>> getOrdersByDate(@RequestParam(required = false) LocalDate date) {
         log.info("REST request to get Orders by date");
 
         return ResponseEntity
@@ -56,7 +56,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/order/product", produces = {"application/json"})
-    public ResponseEntity<List<OrderDto>> getOrdersByProduct(@RequestParam Long productId) {
+    public ResponseEntity<List<OrderDto>> getOrdersByProduct(@RequestParam(required = false) Long productId) {
         log.info("REST request to get Orders by Product");
 
         return ResponseEntity
@@ -65,7 +65,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/order/customer", produces = {"application/json"})
-    public ResponseEntity<List<OrderDto>> getOrdersByCustomer(@RequestParam Long customerId) {
+    public ResponseEntity<List<OrderDto>> getOrdersByCustomer(@RequestParam(required = false) Long customerId) {
         log.info("REST request to get Orders by Customer");
 
         return ResponseEntity
@@ -74,11 +74,9 @@ public class OrderController {
     }
 
     @DeleteMapping("/order/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+    public void deleteOrder(@PathVariable Long id) {
         log.info("REST request to delete Order : {}", id);
 
         orderService.delete(id);
-
-        return ResponseEntity.noContent().build();
     }
 }
