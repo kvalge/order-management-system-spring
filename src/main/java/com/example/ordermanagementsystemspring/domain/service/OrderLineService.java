@@ -50,7 +50,7 @@ public class OrderLineService {
     public OrderLineDto save(OrderLineRequest request) {
         log.info("Request to save Order Line : {}", request);
 
-        orderLineValidationService.OrderLineDataNotFound(request);
+        orderLineValidationService.orderLineDataNotFound(request);
         productValidationService.productNotFound(request.getProductId());
         orderValidationService.orderNotFound(request.getOrderId());
 

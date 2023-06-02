@@ -17,7 +17,7 @@ public class OrderLineValidationService {
     @Resource
     private OrderLineRepository orderLineRepository;
 
-    public void OrderLineDataNotFound(OrderLineRequest request) {
+    public void orderLineDataNotFound(OrderLineRequest request) {
         if (request.getQuantity() == 0 || request.getProductId() == 0 || request.getOrderId() == 0) {
             throw new OrderLineException("Order Line data not found!");
         }
