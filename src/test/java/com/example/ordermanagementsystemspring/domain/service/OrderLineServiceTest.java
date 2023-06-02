@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -62,6 +63,7 @@ class OrderLineServiceTest {
     OrderLineRequest request = new OrderLineRequest();
     OrderLineDto orderLineDto = new OrderLineDto();
     Product product = new Product();
+    Order order = new Order();
     List<OrderLine> orderLines = new ArrayList<>();
     List<OrderLineDto> orderLineDtos = new ArrayList<>();
 
@@ -77,7 +79,6 @@ class OrderLineServiceTest {
         customer.setEmail("Customer email");
         customer.setTelephone("Customer telephone");
 
-        Order order = new Order();
         order.setId(1L);
         order.setSubmissionDate(LocalDate.ofEpochDay(2023-06-02));
         order.setCustomer(customer);
@@ -127,6 +128,13 @@ class OrderLineServiceTest {
 
     @Test
     void update() {
+        Mockito.doNothing().when(orderLineValidationService).orderLineDtoDataNotFound(orderLineDto);
+        Mockito.doNothing().when(orderValidationService).orderNotFound(order.getId());
+        Mockito.doNothing().when(orderLineMapper).update(orderLine, orderLineDto);
+
+        orderLineService.update(orderLineDto);
+
+        Mockito.verify(orderLineRepository, times(1)).save(orderLine);
     }
 
     @Test
