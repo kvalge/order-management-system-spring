@@ -2,9 +2,11 @@ package com.example.ordermanagementsystemspring.domain.service;
 
 import com.example.ordermanagementsystemspring.domain.model.Customer;
 import com.example.ordermanagementsystemspring.domain.model.Order;
+import com.example.ordermanagementsystemspring.domain.model.Product;
 import com.example.ordermanagementsystemspring.domain.repository.CustomerRepository;
 import com.example.ordermanagementsystemspring.domain.repository.OrderRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderDto;
+import com.example.ordermanagementsystemspring.domain.service.dto.OrderLineDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.OrderRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.OrderMapper;
 import com.example.ordermanagementsystemspring.domain.validation.CustomerValidationService;
@@ -63,8 +65,11 @@ class OrderServiceTest {
     OrderRequest request = new OrderRequest();
     OrderDto orderDto = new OrderDto();
     Customer customer = new Customer();
+    Product product = new Product();
+    OrderLineDto orderLineDto = new OrderLineDto();
     List<Order> orders = new ArrayList<>();
     List<OrderDto> orderDtos = new ArrayList<>();
+    List<OrderLineDto> orderLineDtos = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -72,6 +77,10 @@ class OrderServiceTest {
         customer.setFullName("Customer Full Name");
         customer.setEmail("Customer email");
         customer.setTelephone("Customer telephone");
+
+        product.setId(1L);
+        product.setName("Product Name");
+        product.setUnitPrice(11F);
 
         order.setId(1L);
         order.setCustomer(customer);
@@ -84,6 +93,13 @@ class OrderServiceTest {
         orderDto.setCustomerId(customer.getId());
 
         orderDtos.add(orderDto);
+
+        orderLineDto.setId(1L);
+        orderLineDto.setQuantity(11);
+        orderLineDto.setProductId(product.getId());
+        orderLineDto.setOrderId(order.getId());
+
+        orderLineDtos.add(orderLineDto);
 
         Mockito.doNothing().when(orderValidationService).orderNotFound(anyLong());
         when(orderRepository.findById(anyLong())).thenReturn(Optional.ofNullable(order));
@@ -134,6 +150,14 @@ class OrderServiceTest {
 
     @Test
     void findByProduct() {
+        Mockito.doNothing().when(productValidationService).productNotFound(anyLong());
+        Mockito.doNothing().when(orderLineValidationService).orderLinesByProductNotFound(anyLong());
+        when(orderLineService.findByProduct(anyLong())).thenReturn(orderLineDtos);
+
+        List<OrderDto> dtos = orderService.findByProduct(product.getId());
+
+        assertThat(dtos).isNotNull().isNotEmpty().hasSize(1);
+        assertEquals(customer.getId(), dtos.get(0).getCustomerId());
     }
 
     @Test
