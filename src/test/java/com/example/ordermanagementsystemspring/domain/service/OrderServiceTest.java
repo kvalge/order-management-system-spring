@@ -162,6 +162,14 @@ class OrderServiceTest {
 
     @Test
     void findByCustomer() {
+        Mockito.doNothing().when(customerValidationService).customerNotFound(anyLong());
+        Mockito.doNothing().when(orderValidationService).ordersByCustomerNotFound(anyLong());
+        when(orderRepository.findAllByCustomerId(customer.getId())).thenReturn(orders);
+
+        List<OrderDto> dtos = orderService.findByCustomer(customer.getId());
+
+        assertThat(dtos).isNotNull().isNotEmpty().hasSize(1);
+        assertEquals(customer.getId(), dtos.get(0).getCustomerId());
     }
 
     @Test
