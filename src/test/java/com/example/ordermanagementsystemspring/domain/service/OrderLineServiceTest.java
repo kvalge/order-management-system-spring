@@ -21,8 +21,11 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -58,10 +61,12 @@ class OrderLineServiceTest {
     OrderLine orderLine = new OrderLine();
     OrderLineRequest request = new OrderLineRequest();
     OrderLineDto orderLineDto = new OrderLineDto();
+    Product product = new Product();
+    List<OrderLine> orderLines = new ArrayList<>();
+    List<OrderLineDto> orderLineDtos = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        Product product = new Product();
         product.setId(1L);
         product.setName("Product Name");
         product.setUnitPrice(11.11F);
@@ -82,11 +87,16 @@ class OrderLineServiceTest {
         orderLine.setProduct(product);
         orderLine.setOrder(order);
 
+        orderLines.add(orderLine);
+
         request.setQuantity(11);
 
         orderLineDto.setId(1L);
         orderLineDto.setQuantity(11);
 
+        orderLineDtos.add(orderLineDto);
+
+        Mockito.doNothing().when(productValidationService).productNotFound(product.getId());
         when(orderLineRepository.findById(anyLong())).thenReturn(Optional.ofNullable(orderLine));
         when(orderLineRepository.save(Mockito.any(OrderLine.class))).thenReturn(orderLine);
         when(orderLineMapper.toDto(orderLine)).thenReturn(orderLineDto);
@@ -94,7 +104,6 @@ class OrderLineServiceTest {
     @Test
     void save() {
         Mockito.doNothing().when(orderLineValidationService).orderLineDataNotFound(request);
-        Mockito.doNothing().when(productValidationService).productNotFound(request.getProductId());
         Mockito.doNothing().when(orderValidationService).orderNotFound(request.getOrderId());
         when(orderLineMapper.requestToEntity(request)).thenReturn(orderLine);
 
@@ -106,6 +115,14 @@ class OrderLineServiceTest {
 
     @Test
     void findByProduct() {
+        Mockito.doNothing().when(orderLineValidationService).orderLinesByProductNotFound(product.getId());
+        when(orderLineRepository.findAllByProductId(product.getId())).thenReturn(orderLines);
+        when(orderLineMapper.toDtoList(orderLines)).thenReturn(orderLineDtos);
+
+        List<OrderLineDto> dtos = orderLineService.findByProduct(product.getId());
+
+        assertThat(dtos).isNotNull().isNotEmpty().hasSize(1);
+        assertEquals(orderLineDto.getQuantity(), dtos.get(0).getQuantity());
     }
 
     @Test
