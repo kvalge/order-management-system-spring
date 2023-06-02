@@ -127,5 +127,10 @@ class CustomerServiceTest {
 
     @Test
     void delete() {
+        Mockito.doNothing().when(validationService).customerNotFound(anyLong());
+
+        customerService.delete(customerDto.getId());
+
+        Mockito.verify(customerRepository, times(1)).deleteById(anyLong());
     }
 }
