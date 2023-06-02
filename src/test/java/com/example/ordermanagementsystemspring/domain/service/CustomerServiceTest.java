@@ -118,6 +118,11 @@ class CustomerServiceTest {
 
     @Test
     void partialUpdate() {
+        Mockito.doNothing().when(customerMapper).partialUpdate(customer, customerDto);
+
+        customerService.partialUpdate(customerDto);
+
+        Mockito.verify(customerRepository, times(1)).save(customer);
     }
 
     @Test
