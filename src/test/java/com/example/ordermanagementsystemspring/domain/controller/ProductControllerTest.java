@@ -21,8 +21,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = ProductController.class)
 class ProductControllerTest {
@@ -91,7 +90,16 @@ class ProductControllerTest {
     }
 
     @Test
-    void updateProduct() {
+    void updateProduct() throws Exception {
+        when(productService.update(productDto)).thenReturn(productDto);
+
+        ResultActions response = mockMvc.perform(put("/api/product")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(productDto)));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(productDto.getName())))
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
