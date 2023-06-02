@@ -57,13 +57,16 @@ class ProductServiceTest {
         productDto.setUnitPrice(11.11F);
 
         productDtos.add(productDto);
+
+        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
+        when(productRepository.findById(productDto.getId())).thenReturn(Optional.ofNullable(product));
+        when(productRepository.save(Mockito.any(Product.class))).thenReturn(product);
+        when(productMapper.toDto(product)).thenReturn(productDto);
     }
 
     @Test
     void save() {
         when(productMapper.requestToEntity(request)).thenReturn(product);
-        when(productRepository.save(Mockito.any(Product.class))).thenReturn(product);
-        when(productMapper.toDto(product)).thenReturn(productDto);
 
         ProductDto dto = productService.save(request);
 
@@ -85,10 +88,6 @@ class ProductServiceTest {
 
     @Test
     void findById() {
-        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
-        when(productRepository.findById(productDto.getId())).thenReturn(Optional.ofNullable(product));
-        when(productMapper.toDto(product)).thenReturn(productDto);
-
         ProductDto dto = productService.findById(productDto.getId());
 
         assertNotNull(dto);
@@ -97,11 +96,7 @@ class ProductServiceTest {
 
     @Test
     void update() {
-        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
-        when(productRepository.findById(productDto.getId())).thenReturn(Optional.ofNullable(product));
         Mockito.doNothing().when(productMapper).update(product, productDto);
-        when(productRepository.save(product)).thenReturn(product);
-        when(productMapper.toDto(product)).thenReturn(productDto);
 
         productService.update(productDto);
 
@@ -110,11 +105,7 @@ class ProductServiceTest {
 
     @Test
     void partialUpdate() {
-        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
-        when(productRepository.findById(productDto.getId())).thenReturn(Optional.ofNullable(product));
         Mockito.doNothing().when(productMapper).partialUpdate(product, productDto);
-        when(productRepository.save(product)).thenReturn(product);
-        when(productMapper.toDto(product)).thenReturn(productDto);
 
         productService.partialUpdate(productDto);
 
@@ -123,8 +114,6 @@ class ProductServiceTest {
 
     @Test
     void delete() {
-        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
-
         productService.delete(product.getId());
 
         Mockito.verify(productRepository, times(1)).deleteById(anyLong());
