@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(controllers = ProductController.class)
@@ -43,6 +45,7 @@ class ProductControllerTest {
         request.setName("Product Name");
         request.setUnitPrice(11.11F);
 
+        productDto.setId(1L);
         productDto.setName("Product Name");
         productDto.setUnitPrice(11.11F);
 
@@ -63,11 +66,20 @@ class ProductControllerTest {
     }
 
     @Test
-    void getAllProducts() {
+    void getAllProducts() throws Exception {
+        when(productService.findAll()).thenReturn(productDtos);
+
+        ResultActions response = mockMvc.perform(get("/api/product")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(productDtos)));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
     void getProductById() {
+
     }
 
     @Test
