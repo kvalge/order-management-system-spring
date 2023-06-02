@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +88,7 @@ class OrderServiceTest {
         Mockito.doNothing().when(orderValidationService).orderNotFound(anyLong());
         when(orderRepository.findById(anyLong())).thenReturn(Optional.ofNullable(order));
         when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order);
+        when(orderMapper.toDtoList(orders)).thenReturn(orderDtos);
         when(orderMapper.toDto(order)).thenReturn(orderDto);
     }
 
@@ -105,7 +107,6 @@ class OrderServiceTest {
     void findAll() {
         Mockito.doNothing().when(orderValidationService).ordersNotFound();
         when(orderRepository.findAll()).thenReturn(orders);
-        when(orderMapper.toDtoList(orders)).thenReturn(orderDtos);
 
         List<OrderDto> dtos = orderService.findAll();
 
@@ -123,6 +124,12 @@ class OrderServiceTest {
 
     @Test
     void findByDate() {
+        Mockito.doNothing().when(orderValidationService).ordersByDateNotFound(LocalDate.now());
+        when(orderRepository.findAllBySubmissionDate(LocalDate.now())).thenReturn(orders);
+
+        List<OrderDto> dtos = orderService.findByDate(LocalDate.now());
+
+        assertThat(dtos).isNotNull().isNotEmpty().hasSize(1);
     }
 
     @Test
