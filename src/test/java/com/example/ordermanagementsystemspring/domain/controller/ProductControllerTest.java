@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -116,6 +117,12 @@ class ProductControllerTest {
     }
 
     @Test
-    void deleteProduct() {
+    void deleteProduct() throws Exception {
+        doNothing().when(productService).delete(1L);
+
+        ResultActions response = mockMvc.perform(delete("/api/product/1")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
