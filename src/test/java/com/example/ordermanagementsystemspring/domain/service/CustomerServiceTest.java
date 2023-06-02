@@ -14,11 +14,15 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -46,6 +50,7 @@ class CustomerServiceTest {
 
     @BeforeEach
     void setUp() {
+        customer.setId(1L);
         customer.setFullName("Customer Full Name");
         customer.setEmail("Customer email");
         customer.setTelephone("Customer telephone");
@@ -56,12 +61,15 @@ class CustomerServiceTest {
         request.setEmail("Customer email");
         request.setTelephone("Customer telephone");
 
+        customerDto.setId(1L);
         customerDto.setFullName("Customer Full Name");
         customerDto.setEmail("Customer email");
         customerDto.setTelephone("Customer telephone");
 
         customerDtos.add(customerDto);
 
+        when(customerRepository.findAllById(Collections.singleton(anyLong()))).thenReturn(customers);
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.ofNullable(customer));
         when(customerRepository.save(Mockito.any(Customer.class))).thenReturn(customer);
         when(customerMapper.toDto(customer)).thenReturn(customerDto);
     }
@@ -92,10 +100,20 @@ class CustomerServiceTest {
 
     @Test
     void findById() {
+        CustomerDto dto = customerService.findById(customer.getId());
+
+        assertNotNull(dto);
+        assertEquals(customerDto.getFullName(), dto.getFullName());
     }
 
     @Test
     void update() {
+        Mockito.doNothing().when(validationService).customerDtoDataNotFound(customerDto);
+        Mockito.doNothing().when(customerMapper).update(customer, customerDto);
+
+        customerService.update(customerDto);
+
+        Mockito.verify(customerRepository, times(1)).save(customer);
     }
 
     @Test
