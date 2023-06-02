@@ -4,6 +4,7 @@ import com.example.ordermanagementsystemspring.domain.service.ProductService;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.ProductRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +36,7 @@ class ProductControllerTest {
 
     ProductRequest request = new ProductRequest();
     ProductDto productDto = new ProductDto();
+    List<ProductDto> productDtos = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -39,6 +45,8 @@ class ProductControllerTest {
 
         productDto.setName("Product Name");
         productDto.setUnitPrice(11.11F);
+
+        productDtos.add(productDto);
     }
 
     @Test
@@ -49,7 +57,9 @@ class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productDto)));
 
-        response.andExpect(MockMvcResultMatchers.status().isOk());
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(productDto.getName())))
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
