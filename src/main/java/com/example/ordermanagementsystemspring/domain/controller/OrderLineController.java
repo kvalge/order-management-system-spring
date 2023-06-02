@@ -29,7 +29,7 @@ public class OrderLineController {
     }
 
     @GetMapping(value = "/orderline/product", produces = {"application/json"})
-    public ResponseEntity<List<OrderLineDto>> getOrdersByProduct(@RequestParam Long productId) {
+    public ResponseEntity<List<OrderLineDto>> getOrderLinesByProduct(@RequestParam(required = false) Long productId) {
         log.info("REST request to get Order Lines by Product id");
 
         return ResponseEntity
@@ -51,11 +51,9 @@ public class OrderLineController {
     }
 
     @DeleteMapping("/orderline/{id}")
-    public ResponseEntity<Void> deleteOrderLine(@PathVariable Long id) {
+    public void deleteOrderLine(@PathVariable Long id) {
         log.info("REST request to delete Order Line : {}", id);
 
         orderLineService.delete(id);
-
-        return ResponseEntity.noContent().build();
     }
 }
