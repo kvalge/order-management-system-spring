@@ -78,8 +78,16 @@ class ProductControllerTest {
     }
 
     @Test
-    void getProductById() {
+    void getProductById() throws Exception {
+        when(productService.findById(1L)).thenReturn(productDto);
 
+        ResultActions response = mockMvc.perform(get("/api/product/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(productDto)));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(productDto.getName())))
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
