@@ -41,9 +41,7 @@ class CustomerServiceTest {
     private CustomerValidationService validationService;
 
     Customer customer = new Customer();
-
     CustomerRequest request = new CustomerRequest();
-
     CustomerDto customerDto = new CustomerDto();
     List<Customer> customers = new ArrayList<>();
     List<CustomerDto> customerDtos = new ArrayList<>();
