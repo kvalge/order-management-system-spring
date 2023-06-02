@@ -80,7 +80,7 @@ class OrderLineServiceTest {
         customer.setTelephone("Customer telephone");
 
         order.setId(1L);
-        order.setSubmissionDate(LocalDate.ofEpochDay(2023-06-02));
+        order.setSubmissionDate(LocalDate.ofEpochDay(2023 - 06 - 02));
         order.setCustomer(customer);
 
         orderLine.setId(1L);
@@ -102,6 +102,7 @@ class OrderLineServiceTest {
         when(orderLineRepository.save(Mockito.any(OrderLine.class))).thenReturn(orderLine);
         when(orderLineMapper.toDto(orderLine)).thenReturn(orderLineDto);
     }
+
     @Test
     void save() {
         Mockito.doNothing().when(orderLineValidationService).orderLineDataNotFound(request);
