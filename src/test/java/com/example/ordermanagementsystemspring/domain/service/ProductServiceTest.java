@@ -123,5 +123,10 @@ class ProductServiceTest {
 
     @Test
     void delete() {
+        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
+
+        productService.delete(product.getId());
+
+        Mockito.verify(productRepository, times(1)).deleteById(anyLong());
     }
 }
