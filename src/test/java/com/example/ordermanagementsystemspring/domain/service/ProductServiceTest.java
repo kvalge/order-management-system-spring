@@ -34,7 +34,7 @@ class ProductServiceTest {
     private ProductMapper productMapper;
 
     @Mock
-    ProductValidationService validationService;
+    private ProductValidationService validationService;
 
     Product product = new Product();
     ProductRequest request = new ProductRequest();
