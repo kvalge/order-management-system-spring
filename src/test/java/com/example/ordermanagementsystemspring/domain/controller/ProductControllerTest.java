@@ -103,7 +103,16 @@ class ProductControllerTest {
     }
 
     @Test
-    void partialUpdateProduct() {
+    void partialUpdateProduct() throws Exception {
+        when(productService.partialUpdate(productDto)).thenReturn(productDto);
+
+        ResultActions response = mockMvc.perform(patch("/api/product/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(productDto)));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(productDto.getName())))
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
