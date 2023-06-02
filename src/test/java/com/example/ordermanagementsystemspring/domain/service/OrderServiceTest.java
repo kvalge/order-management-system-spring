@@ -115,6 +115,10 @@ class OrderServiceTest {
 
     @Test
     void findById() {
+        OrderDto dto = orderService.findById(order.getId());
+
+        assertNotNull(dto);
+        assertEquals(customer.getId(), dto.getCustomerId());
     }
 
     @Test
