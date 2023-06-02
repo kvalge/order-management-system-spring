@@ -18,9 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ProductServiceTest {
@@ -45,6 +44,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
+        product.setId(1L);
         product.setName("Product Name");
         product.setUnitPrice(11.11F);
 
@@ -97,6 +97,15 @@ class ProductServiceTest {
 
     @Test
     void update() {
+        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
+        when(productRepository.findById(productDto.getId())).thenReturn(Optional.ofNullable(product));
+        Mockito.doNothing().when(productMapper).update(product, productDto);
+        when(productRepository.save(product)).thenReturn(product);
+        when(productMapper.toDto(product)).thenReturn(productDto);
+
+        productService.update(productDto);
+
+        Mockito.verify(productRepository, times(1)).save(product);
     }
 
     @Test
