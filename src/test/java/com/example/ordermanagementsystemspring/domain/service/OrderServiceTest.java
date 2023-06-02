@@ -18,8 +18,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -56,12 +59,11 @@ class OrderServiceTest {
     private CustomerValidationService customerValidationService;
 
     Order order = new Order();
-
     OrderRequest request = new OrderRequest();
-
     OrderDto orderDto = new OrderDto();
-
     Customer customer = new Customer();
+    List<Order> orders = new ArrayList<>();
+    List<OrderDto> orderDtos = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -73,10 +75,14 @@ class OrderServiceTest {
         order.setId(1L);
         order.setCustomer(customer);
 
+        orders.add(order);
+
         request.setCustomerId(customer.getId());
 
         orderDto.setId(1L);
         orderDto.setCustomerId(customer.getId());
+
+        orderDtos.add(orderDto);
 
         Mockito.doNothing().when(orderValidationService).orderNotFound(anyLong());
         when(orderRepository.findById(anyLong())).thenReturn(Optional.ofNullable(order));
@@ -97,6 +103,14 @@ class OrderServiceTest {
 
     @Test
     void findAll() {
+        Mockito.doNothing().when(orderValidationService).ordersNotFound();
+        when(orderRepository.findAll()).thenReturn(orders);
+        when(orderMapper.toDtoList(orders)).thenReturn(orderDtos);
+
+        List<OrderDto> dtos = orderService.findAll();
+
+        assertThat(dtos).isNotNull().isNotEmpty().hasSize(1);
+        assertEquals(request.getCustomerId(), dtos.get(0).getCustomerId());
     }
 
     @Test
