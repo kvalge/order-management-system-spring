@@ -110,6 +110,15 @@ class ProductServiceTest {
 
     @Test
     void partialUpdate() {
+        Mockito.doNothing().when(validationService).productNotFound(productDto.getId());
+        when(productRepository.findById(productDto.getId())).thenReturn(Optional.ofNullable(product));
+        Mockito.doNothing().when(productMapper).partialUpdate(product, productDto);
+        when(productRepository.save(product)).thenReturn(product);
+        when(productMapper.toDto(product)).thenReturn(productDto);
+
+        productService.partialUpdate(productDto);
+
+        Mockito.verify(productRepository, times(1)).save(product);
     }
 
     @Test
