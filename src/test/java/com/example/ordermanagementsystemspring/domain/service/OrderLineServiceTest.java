@@ -139,5 +139,10 @@ class OrderLineServiceTest {
 
     @Test
     void delete() {
+        Mockito.doNothing().when(orderLineValidationService).orderLineNotFound(anyLong());
+
+        orderLineService.delete(orderLineDto.getId());
+
+        Mockito.verify(orderLineRepository, times(1)).deleteById(anyLong());
     }
 }
