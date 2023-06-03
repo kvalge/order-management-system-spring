@@ -73,6 +73,7 @@ class OrderLineControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/orderline/product")
                 .contentType(MediaType.APPLICATION_JSON)
+                        .param("productId", "1")
                 .content(objectMapper.writeValueAsString(orderLineDtos)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())

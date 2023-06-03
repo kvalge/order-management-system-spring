@@ -29,7 +29,7 @@ public class OrderLineController {
     }
 
     @GetMapping(value = "/orderline/product", produces = {"application/json"})
-    public ResponseEntity<List<OrderLineDto>> getOrderLinesByProduct(@RequestParam(required = false) Long productId) {
+    public ResponseEntity<List<OrderLineDto>> getOrderLinesByProduct(@RequestParam Long productId) {
         log.info("REST request to get Order Lines by Product id");
 
         return ResponseEntity

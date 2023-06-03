@@ -88,10 +88,11 @@ class OrderControllerTest {
 
     @Test
     void getOrdersByDate() throws Exception {
-        when(orderService.findByDate(LocalDate.ofEpochDay(2023-06-02))).thenReturn(orderDtos);
+        when(orderService.findByDate(LocalDate.ofEpochDay(2023 - 06 - 02))).thenReturn(orderDtos);
 
         ResultActions response = mockMvc.perform(get("/api/order/date")
                 .contentType(MediaType.APPLICATION_JSON)
+                .param("date", "2023-06-02")
                 .content(objectMapper.writeValueAsString(orderDtos)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -104,6 +105,7 @@ class OrderControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/order/product")
                 .contentType(MediaType.APPLICATION_JSON)
+                .param("productId", "1")
                 .content(objectMapper.writeValueAsString(orderDtos)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -116,6 +118,7 @@ class OrderControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/order/customer")
                 .contentType(MediaType.APPLICATION_JSON)
+                .param("customerId", "1")
                 .content(objectMapper.writeValueAsString(orderDtos)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())

@@ -47,7 +47,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/order/date", produces = {"application/json"})
-    public ResponseEntity<List<OrderDto>> getOrdersByDate(@RequestParam(required = false) LocalDate date) {
+    public ResponseEntity<List<OrderDto>> getOrdersByDate(@RequestParam LocalDate date) {
         log.info("REST request to get Orders by date");
 
         return ResponseEntity
@@ -56,7 +56,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/order/product", produces = {"application/json"})
-    public ResponseEntity<List<OrderDto>> getOrdersByProduct(@RequestParam(required = false) Long productId) {
+    public ResponseEntity<List<OrderDto>> getOrdersByProduct(@RequestParam Long productId) {
         log.info("REST request to get Orders by Product");
 
         return ResponseEntity
@@ -65,7 +65,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/order/customer", produces = {"application/json"})
-    public ResponseEntity<List<OrderDto>> getOrdersByCustomer(@RequestParam(required = false) Long customerId) {
+    public ResponseEntity<List<OrderDto>> getOrdersByCustomer(@RequestParam Long customerId) {
         log.info("REST request to get Orders by Customer");
 
         return ResponseEntity
