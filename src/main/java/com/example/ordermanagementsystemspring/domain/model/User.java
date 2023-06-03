@@ -1,6 +1,5 @@
-package com.example.ordermanagementsystemspring.security.model;
+package com.example.ordermanagementsystemspring.domain.model;
 
-import com.example.ordermanagementsystemspring.domain.model.Customer;
 import jakarta.persistence.*;
 import lombok.Data;
 
