@@ -2,7 +2,6 @@ package com.example.ordermanagementsystemspring.domain.validation;
 
 import com.example.ordermanagementsystemspring.domain.exception.OrderException;
 import com.example.ordermanagementsystemspring.domain.model.Order;
-import com.example.ordermanagementsystemspring.domain.repository.OrderLineRepository;
 import com.example.ordermanagementsystemspring.domain.repository.OrderRepository;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,6 @@ public class OrderValidationService {
 
     @Resource
     private OrderRepository orderRepository;
-
-    @Resource
-    private OrderLineRepository orderLineRepository;
 
     public void ordersNotFound() {
         List<Order> orders = orderRepository.findAll();
