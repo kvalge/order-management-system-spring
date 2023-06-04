@@ -18,8 +18,8 @@ Add, get, edit, delete Customers, Products, OrderLines, Orders, Roles, Users.
 Slf4j has been used to generate logging statements.
 
 ### Testing
-For testing has been used the framework support of Spring Boot (@SpringBootTest and for JPA components 
-@DataJpaTest) with Mockito framework.   
+For testing has been used the framework support of Spring Boot (@SpringBootTest, @WebMvcTest and 
+for JPA components @DataJpaTest) with Mockito framework.   
 
 ### Database
 PostgreSQL credentials are set in application.properties file.  
