@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = CustomerController.class)
+@WithMockUser(username = "user", roles = "USER")
 class CustomerControllerTest {
 
     @Autowired
@@ -60,6 +63,7 @@ class CustomerControllerTest {
 
         ResultActions response = mockMvc.perform(post("/api/customer")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(customerDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -73,6 +77,7 @@ class CustomerControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/customer")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(customerDtos)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -85,6 +90,7 @@ class CustomerControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/customer/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(customerDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -98,6 +104,7 @@ class CustomerControllerTest {
 
         ResultActions response = mockMvc.perform(put("/api/customer")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(customerDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -111,6 +118,7 @@ class CustomerControllerTest {
 
         ResultActions response = mockMvc.perform(patch("/api/customer/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(customerDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -123,7 +131,8 @@ class CustomerControllerTest {
         doNothing().when(customerService).delete(1L);
 
         ResultActions response = mockMvc.perform(delete("/api/customer/1")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = OrderController.class)
+@WithMockUser(username = "user", roles = "USER")
 class OrderControllerTest {
 
     @Autowired
@@ -56,6 +59,7 @@ class OrderControllerTest {
 
         ResultActions response = mockMvc.perform(post("/api/order")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(orderDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -68,6 +72,7 @@ class OrderControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/order")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(orderDtos)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -80,6 +85,7 @@ class OrderControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/order/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(orderDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -92,6 +98,7 @@ class OrderControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/order/date")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .param("date", "2023-06-02")
                 .content(objectMapper.writeValueAsString(orderDtos)));
 
@@ -105,6 +112,7 @@ class OrderControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/order/product")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .param("productId", "1")
                 .content(objectMapper.writeValueAsString(orderDtos)));
 
@@ -118,6 +126,7 @@ class OrderControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/order/customer")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .param("customerId", "1")
                 .content(objectMapper.writeValueAsString(orderDtos)));
 
@@ -130,7 +139,8 @@ class OrderControllerTest {
         doNothing().when(orderService).delete(1L);
 
         ResultActions response = mockMvc.perform(delete("/api/order/1")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }

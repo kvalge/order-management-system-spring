@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = OrderLineController.class)
+@WithMockUser(username = "user", roles = "USER")
 class OrderLineControllerTest {
 
     @Autowired
@@ -60,6 +63,7 @@ class OrderLineControllerTest {
 
         ResultActions response = mockMvc.perform(post("/api/ordeline")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(orderLineDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -73,7 +77,8 @@ class OrderLineControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/orderline/product")
                 .contentType(MediaType.APPLICATION_JSON)
-                        .param("productId", "1")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .param("productId", "1")
                 .content(objectMapper.writeValueAsString(orderLineDtos)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -86,6 +91,7 @@ class OrderLineControllerTest {
 
         ResultActions response = mockMvc.perform(put("/api/orderline")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(orderLineDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -98,7 +104,8 @@ class OrderLineControllerTest {
         doNothing().when(orderLineService).delete(1L);
 
         ResultActions response = mockMvc.perform(delete("/api/orderline/1")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }

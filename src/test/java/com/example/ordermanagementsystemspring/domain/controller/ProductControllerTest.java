@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = ProductController.class)
+@WithMockUser(username = "user", roles = "USER")
 class ProductControllerTest {
 
     @Autowired
@@ -58,6 +61,7 @@ class ProductControllerTest {
 
         ResultActions response = mockMvc.perform(post("/api/product")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(productDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -71,6 +75,7 @@ class ProductControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/product")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(productDtos)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -83,6 +88,7 @@ class ProductControllerTest {
 
         ResultActions response = mockMvc.perform(get("/api/product/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(productDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -96,6 +102,7 @@ class ProductControllerTest {
 
         ResultActions response = mockMvc.perform(put("/api/product")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(productDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -109,6 +116,7 @@ class ProductControllerTest {
 
         ResultActions response = mockMvc.perform(patch("/api/product/1")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 .content(objectMapper.writeValueAsString(productDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -121,7 +129,8 @@ class ProductControllerTest {
         doNothing().when(productService).delete(1L);
 
         ResultActions response = mockMvc.perform(delete("/api/product/1")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
         response.andExpect(MockMvcResultMatchers.status().isOk());
     }
