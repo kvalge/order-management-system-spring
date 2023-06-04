@@ -1,6 +1,6 @@
 package com.example.ordermanagementsystemspring.domain.validation;
 
-import com.example.ordermanagementsystemspring.domain.exception.CustomerException;
+import com.example.ordermanagementsystemspring.domain.exception.UserException;
 import com.example.ordermanagementsystemspring.domain.model.User;
 import com.example.ordermanagementsystemspring.domain.repository.UserRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.UserRequest;
@@ -21,7 +21,7 @@ public class UserValidationService {
 
         for (User user : users) {
             if (Objects.equals(user.getUsername(), request.getUsername())) {
-                throw new CustomerException("Username " + request.getUsername() + " already exists!");
+                throw new UserException("Username " + request.getUsername() + " already exists!");
             }
         }
     }
