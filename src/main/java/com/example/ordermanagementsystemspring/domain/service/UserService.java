@@ -4,7 +4,6 @@ import com.example.ordermanagementsystemspring.domain.model.Role;
 import com.example.ordermanagementsystemspring.domain.model.User;
 import com.example.ordermanagementsystemspring.domain.repository.RoleRepository;
 import com.example.ordermanagementsystemspring.domain.repository.UserRepository;
-import com.example.ordermanagementsystemspring.domain.service.dto.UserDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.UserRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.UserMapper;
 import com.example.ordermanagementsystemspring.domain.validation.UserValidationService;
@@ -37,7 +36,7 @@ public class UserService {
     @Resource
     private UserValidationService validationService;
 
-    public UserDto save(UserRequest request) {
+    public void save(UserRequest request) {
         validationService.userAlreadyExists(request);
 
         User user = userMapper.requestToEntity(request);
@@ -49,7 +48,5 @@ public class UserService {
         user.setRoles(roles);
 
         userRepository.save(user);
-
-        return userMapper.toDto(user);
     }
 }
