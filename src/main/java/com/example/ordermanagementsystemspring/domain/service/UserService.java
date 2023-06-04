@@ -9,6 +9,7 @@ import com.example.ordermanagementsystemspring.domain.service.dto.UserRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.UserMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +30,18 @@ public class UserService {
     @Resource
     private RoleRepository roleRepository;
 
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
     public UserDto save(UserRequest request) {
         User user = userMapper.requestToEntity(request);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         Set<Role> roles = new HashSet<>();
-        Role role = roleRepository.findByName("ROLE_USER");
+        Role role = roleRepository.findByName("USER");
         roles.add(role);
         user.setRoles(roles);
+
         userRepository.save(user);
 
         return userMapper.toDto(user);
