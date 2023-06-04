@@ -7,6 +7,7 @@ import com.example.ordermanagementsystemspring.domain.repository.UserRepository;
 import com.example.ordermanagementsystemspring.domain.service.dto.UserDto;
 import com.example.ordermanagementsystemspring.domain.service.dto.UserRequest;
 import com.example.ordermanagementsystemspring.domain.service.mapper.UserMapper;
+import com.example.ordermanagementsystemspring.domain.validation.UserValidationService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +34,12 @@ public class UserService {
     @Resource
     private PasswordEncoder passwordEncoder;
 
+    @Resource
+    private UserValidationService validationService;
+
     public UserDto save(UserRequest request) {
+        validationService.userAlreadyExists(request);
+
         User user = userMapper.requestToEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
